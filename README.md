@@ -13,5 +13,5 @@ Steps:
 ### Program structure
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/master/doc/program_structure.svg">
+    <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
 </p>
