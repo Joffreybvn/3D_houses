@@ -6,7 +6,7 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - python -m unittest tests/geocodet_test.py
+  - python -m unittest tests/geocoder_test.py
 
 deploy:
   edge: true
