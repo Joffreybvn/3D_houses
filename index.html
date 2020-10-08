@@ -127,42 +127,80 @@
         </nav>
 
         <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <canvas id="render">
 
+            </canvas>
         </main>
     </div>
 </div>
 
 
 <script src="./assets/js/bootstrap.js"></script>
-<script src="./assets/js/three.js"></script>
-		<script>
-            var container = document.getElementsByTagName('main')[0];
+<script type="module">
+import * as THREE from './assets/js/three.r119.module';
 
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+function main() {
+  const canvas = document.getElementById('render');
+  const renderer = new THREE.WebGLRenderer({canvas});
 
-			var renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-			document.body.appendChild( renderer.domElement );
+  const fov = 75;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 5;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.z = 2;
 
-			var geometry = new THREE.BoxGeometry();
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
+  const scene = new THREE.Scene();
 
-			camera.position.z = 5;
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+  }
 
-			var animate = function () {
-				requestAnimationFrame( animate );
+  const boxWidth = 1;
+  const boxHeight = 1;
+  const boxDepth = 1;
+  const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
+  function makeInstance(geometry, color, x) {
+    const material = new THREE.MeshPhongMaterial({color});
 
-				renderer.render( scene, camera );
-			};
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-            container.appendChild( renderer.domElement );
-			animate();
-		</script>
+    cube.position.x = x;
+
+    return cube;
+  }
+
+  const cubes = [
+    makeInstance(geometry, 0x44aa88,  0),
+    makeInstance(geometry, 0x8844aa, -2),
+    makeInstance(geometry, 0xaa8844,  2),
+  ];
+
+  function render(time) {
+    time *= 0.001;
+
+    cubes.forEach((cube, ndx) => {
+      const speed = 1 + ndx * .1;
+      const rot = time * speed;
+      cube.rotation.x = rot;
+      cube.rotation.y = rot;
+    });
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+main();
+</script>
 </body>
 </html>
