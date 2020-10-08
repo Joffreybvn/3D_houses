@@ -13,7 +13,7 @@ deploy:
   provider: bluemixcloudfoundry
   username: $IBM_USERNAME
   password: $IBM_PASSWORD
-  organization: $IBM_ORGANIZATION
+  organization: $IBM_ORGANIZATION_SPACE
   space: staging
   manifest: manifest.yml
   app_name: Wallonia-ml-API
