@@ -2,7 +2,7 @@
 class Config:
 
     def __init__(self):
-        pass
+        self.user_agent = "Wallonia.ml - 3D House application"
 
 
 config = Config()
