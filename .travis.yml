@@ -2,11 +2,11 @@ language: python
 python:
   - 3.8
 
-# install:
-#  - pip install -r requirements.txt
+install:
+  - pip install -r requirements.txt
 
-# script:
-  # - python -m unittest tests/api_v1_test.py
+script:
+  - python -m unittest tests/geocodet_test.py
 
 deploy:
   edge: true
