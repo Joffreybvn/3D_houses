@@ -20,4 +20,4 @@ deploy:
   region: eu-de
   api: https://api.ng.bluemix.net
   on:
-    branch: master
+    branch: main
