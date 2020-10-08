@@ -1,0 +1,23 @@
+language: python
+python:
+  - 3.8
+
+# install:
+#  - pip install -r requirements.txt
+
+# script:
+  # - python -m unittest tests/api_v1_test.py
+
+deploy:
+  edge: true
+  provider: bluemixcloudfoundry
+  username: $IBM_USERNAME
+  password: $IBM_PASSWORD
+  organization: $IBM_ORGANIZATION
+  space: staging
+  manifest: manifest.yml
+  app_name: Wallonia-ml-API
+  region: eu-de
+  api: https://api.ng.bluemix.net
+  on:
+    branch: master

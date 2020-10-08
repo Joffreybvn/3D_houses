@@ -3,7 +3,7 @@ import os
 from src.api import create_api
 
 # Init the API
-port = int(os.environ.get("PORT", 5000))
+port = int(os.environ.get("PORT", 3000))
 api = create_api()
 
 
@@ -11,4 +11,4 @@ api = create_api()
 if __name__ == '__main__':
 
     # Start the API
-    api.run('0.0.0.0', port=port, debug=False, threaded=True)
+    api.run('0.0.0.0', port=port, debug=False)

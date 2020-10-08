@@ -1,9 +1,19 @@
+
 FROM python:3.8-alpine
 
-COPY . /opt/app
-WORKDIR /opt/app
+COPY ./requirements.txt /app/requirements.txt
 
-# RUN pip install gunicorn
-RUN pip install -r requirements.txt
+WORKDIR /app
 
-CMD python main.py
+RUN apk --update add python py-pip openssl ca-certificates py-openssl wget bash linux-headers
+RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-dev py-pip build-base \
+  && pip install --upgrade pip \
+  && pip install --upgrade pipenv\
+  && pip install --upgrade -r /app/requirements.txt\
+  && apk del build-dependencies
+
+COPY . /app
+
+ENTRYPOINT [ "python" ]
+
+CMD [ "main.py" ]

@@ -140,3 +140,19 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+credentials.json
+localdev-config.json
+server/localdev-config.json
+.idea/.gitignore
+.idea/3D_houses.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+src/__pycache__/
+src/api/__pycache__/
+src/api/utils/__pycache__/
+src/api/v1/__pycache__/
+src/geocoder/__pycache__/
+
