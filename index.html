@@ -11,6 +11,8 @@
 
 
     <link href="./assets/css/bootstrap.css" rel="stylesheet">
+    <link href="./assets/css/dashboard.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -28,28 +30,19 @@
             }
         }
     </style>
-
-
-    <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" id="site_title" href="https://wallonia.ml">
+        <img src="./assets/img/logo.svg" class="site_logo" height="24px" width="24px" /><p>Wallonia.ml</p></a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
-        </li>
-    </ul>
 </header>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid" id="content">
+    <div class="row" id="content-row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
@@ -126,18 +119,16 @@
             </div>
         </nav>
 
-        <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <canvas id="render">
-
-            </canvas>
+        <main class="col-md-9 ml-sm-auto col-lg-10">
+            <canvas id="render" width="100%" height="100%"></canvas>
         </main>
     </div>
 </div>
 
 
-<script src="./assets/js/bootstrap.js"></script>
+<script src="./assets/js/dashboard.js"></script>
 <script type="module">
-import * as THREE from './assets/js/three.r119.module';
+import * as THREE from './assets/js/three.r119.module.js';
 
 function main() {
   const canvas = document.getElementById('render');
@@ -181,6 +172,21 @@ function main() {
     makeInstance(geometry, 0x8844aa, -2),
     makeInstance(geometry, 0xaa8844,  2),
   ];
+
+  function resizeRendererToDisplaySize(renderer) {
+    const width = canvas.offsetWidth;
+    const height = window.innerHeight - 55;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+  if (resizeRendererToDisplaySize(renderer)) {
+      camera.aspect = canvas.offsetWidth / (window.innerHeight - 55);
+      camera.updateProjectionMatrix();
+    }
 
   function render(time) {
     time *= 0.001;
