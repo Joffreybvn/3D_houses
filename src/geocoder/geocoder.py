@@ -21,7 +21,7 @@ class Geocoder:
         self.locator = Nominatim(user_agent=config.user_agent)
 
         # Geocode the address
-        self.location = self.locator.geocode(f"Rue {street_name}, {house_number} {postal_code}")
+        self.location = self.locator.geocode(f"{street_name}, {house_number} {postal_code}")
 
     def get_address(self) -> Union[str, None]:
         """Return the full address of the location, or None."""
