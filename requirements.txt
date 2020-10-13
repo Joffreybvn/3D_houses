@@ -2,4 +2,6 @@ flask
 flask_restx
 geopy
 werkzeug
+pymongo
+dnspython
 setuptools

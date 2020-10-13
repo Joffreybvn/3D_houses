@@ -16,3 +16,8 @@ Steps:
 <p align="center">
     <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
 </p>
+
+
+DTM + Cadastre terrain -> Poisson -> Terrain.ply
+DTM + Cadastre Batiment -> BBox + z.max -> House.ply
+DSM - DTM = Vegetation -> Keep points -> Vegetation.pyc
