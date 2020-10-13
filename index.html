@@ -133,10 +133,7 @@
 
     let canvas, renderer, scene, camera, controls;
 
-    init();
-    animate();
-
-    function init() {
+    let init = () => {
 
         // Canvas definition
         canvas = document.getElementById('render');
@@ -174,8 +171,23 @@
             geometry.computeVertexNormals(false);
 
             // Set mesh color and set double side (avoid see through)
-            let material = new THREE.MeshBasicMaterial({color: 0x567d46, side: THREE.DoubleSide});
-            let mesh = new THREE.Mesh(geometry, material);
+            const material = new THREE.MeshBasicMaterial({color: 0x567d46, side: THREE.DoubleSide});
+            const mesh = new THREE.Mesh(geometry, material);
+
+            // Allow shadow and translate to (0, 0, 0)
+            mesh.receiveShadow = true;
+            mesh.geometry.translate(tran_x, tran_y, tran_z)
+
+            scene.add(mesh);
+        });
+
+        // Load house PLY
+        ply_loader.load('./assets/3d/house.ply', (geometry) => {
+            geometry.computeVertexNormals(false);
+
+            // Set mesh color and set double side (avoid see through)
+            const material = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide});
+            const mesh = new THREE.Mesh(geometry, material);
 
             // Allow shadow and translate to (0, 0, 0)
             mesh.receiveShadow = true;
@@ -199,15 +211,18 @@
         console.log(scene)
     }
 
-    function animate() {
+    let animate = () => {
         requestAnimationFrame(animate);
         controls.update();
         render()
     }
 
-    function render() {
-        renderer.render( scene, camera );
+    let render = () => {
+        renderer.render(scene, camera);
     }
+
+    init();
+    animate();
 
 </script>
 </body>
