@@ -12,23 +12,6 @@
     <link href="./assets/css/bootstrap.css" rel="stylesheet">
     <link href="./assets/css/dashboard.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -124,106 +107,50 @@
     </div>
 </div>
 
+<script type="text/javascript" src="./assets/js/jszip.min.js"></script>
+<script type="text/javascript" src="./assets/js/jszip-utils.min.js"></script>
 <script type="module">
+    import * as renderer from './assets/js/renderer.js';
 
-    import * as THREE from './assets/js/three.r119.module.js';
-    import { PLYLoader } from './assets/js/three/PLYLoader.module.js';
-    import { PCDLoader } from './assets/js/three/PCDLoader.module.js';
-    import { TrackballControls } from './assets/js/three/TrackballControls.module.js';
+    new JSZip.external.Promise((resolve, reject) => {
 
-    let canvas, renderer, scene, camera, controls;
-
-    let init = () => {
-
-        // Canvas definition
-        canvas = document.getElementById('render');
-
-        // Renderer definition
-        renderer = new THREE.WebGLRenderer({canvas});
-        renderer.setSize( window.innerWidth, window.innerHeight );
-
-        // Scene definition
-        scene = new THREE.Scene();
-
-        // Camera's constants
-        const fov = 70;
-        const aspect = window.innerWidth / window.innerHeight;  // 2 the canvas default
-        const near = 0.1;
-        const far = 1000;
-        camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        camera.position.set(0, 0, 30);
-        camera.lookAt(0, 0, 0);
-
-        // Camera controls
-        controls = new TrackballControls(camera, renderer.domElement);
-
-        // Load objects
-        const ply_loader = new PLYLoader();
-        const pcd_loader = new PCDLoader();
-
-        // Math position to translate objects (land min + max / 2)
-        const tran_x = - (168418 + 168496) / 2
-        const tran_y = - (147743 + 147821) / 2
-        const tran_z = - (133 + 138) / 2
-
-        // Load land PLY
-        ply_loader.load('./assets/3d/land.ply', (geometry) => {
-            geometry.computeVertexNormals(false);
-
-            // Set mesh color and set double side (avoid see through)
-            const material = new THREE.MeshBasicMaterial({color: 0x567d46, side: THREE.DoubleSide});
-            const mesh = new THREE.Mesh(geometry, material);
-
-            // Allow shadow and translate to (0, 0, 0)
-            mesh.receiveShadow = true;
-            mesh.geometry.translate(tran_x, tran_y, tran_z)
-
-            scene.add(mesh);
+        // Load the zip as binary file
+        JSZipUtils.getBinaryContent('./assets/3d/data.zip', (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
         });
+    })
+        // Open the zip
+        .then((data) => {
+            return JSZip.loadAsync(data);
+        })
 
-        // Load house PLY
-        ply_loader.load('./assets/3d/house.ply', (geometry) => {
-            geometry.computeVertexNormals(false);
+        // Load the files
+        .then((zip) => {
 
-            // Set mesh color and set double side (avoid see through)
-            const material = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide});
-            const mesh = new THREE.Mesh(geometry, material);
+            // Load land.ply
+            zip.file("data/land.ply").async('arraybuffer').then((land) => {
 
-            // Allow shadow and translate to (0, 0, 0)
-            mesh.receiveShadow = true;
-            mesh.geometry.translate(tran_x, tran_y, tran_z)
+                // Load vegetation.pcd
+                zip.file("data/vegetation.pcd").async('arraybuffer').then((vegetation) => {
 
-            scene.add(mesh);
-        });
+                    // Load house.ply
+                    zip.file("data/house.ply").async('arraybuffer').then((house) => {
 
-        // Load vegetation PCD
-        pcd_loader.load('./assets/3d/vegetation.pcd', (points) => {
+                        // Load offsets.json
+                        zip.file("data/offsets.json").async("text").then((offsets) => {
 
-            // Set points size and color
-            points.material.size = 0.5
-            points.material.color.setHex(0x3A5F0B)
-
-            // Translate to (0, 0, 0)
-            points.geometry.translate(tran_x, tran_y, tran_z)
-            scene.add(points);
-        });
-
-        console.log(scene)
-    }
-
-    let animate = () => {
-        requestAnimationFrame(animate);
-        controls.update();
-        render()
-    }
-
-    let render = () => {
-        renderer.render(scene, camera);
-    }
-
-    init();
-    animate();
-
+                            // Render the scene
+                            renderer.init(land, vegetation, house, JSON.parse(offsets))
+                            renderer.animate()
+                        })
+                    })
+                })
+            })
+        })
 </script>
 </body>
 </html>
