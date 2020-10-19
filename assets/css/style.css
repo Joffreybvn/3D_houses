@@ -46,6 +46,15 @@ canvas {
     max-height: 100%;
 }
 
+#sidebarMenu {
+    height: fit-content !important;
+    background-color: transparent !important;
+}
+
+.card-search {
+    box-shadow: 0 0 0.5rem rgba(0,0,0,.3) !important;
+}
+
 .form-label {
     width: unset !important;
 }
