@@ -2,34 +2,114 @@
 // Define constants
 const DATA_API = "https://data.wallonia.ml/file/wallonia-lidar"
 
-let postalCodes;
+let dict_postalCodes, list_postalCodes, postalCode,
+    dict_streetNames, list_streetNames, streetId,
+    dict_houseNumbers, list_houseNumbers, houseId;
 
 // Link html document
-let input_PostalCode = document.getElementById('inputPostalCode')
-let input_StreetName = document.getElementById('inputStreetName')
+const input_PostalCode = document.getElementById('inputPostalCode')
+const input_StreetName = document.getElementById('inputStreetName')
+const input_HouseNumber = document.getElementById('inputHouseNumber')
+
+const button_submit = document.getElementById('button-submit')
+const button_loadSpinner = document.getElementById('button-load-spinner')
 
 
 let init = () => {
 
     // Fetch the Postal code list
-    fetchPostalCodes((result) => {
-        postalCodes = result
+    fetchJSON('/web/postal_codes.json', (result) => {
+
+        dict_postalCodes = result
+        list_postalCodes = Object.keys(result)
 
         // Append the list to the form
-        appendDataList(postalCodes, 'datalist-postal-code')
+        appendDataList(list_postalCodes, 'datalist-postal-code')
+
     })
+
+
+    // Postal Code event listener
+    input_PostalCode.addEventListener('input',
+        () => {onInput(input_PostalCode, list_postalCodes, (result) => {
+
+            if (result) {
+
+                // Save the chosen postal code
+                postalCode = dict_postalCodes[result]
+
+                // Fetch the street name file
+                fetchJSON('/web/' + postalCode + '.json', (result) => {
+                    dict_streetNames = result
+                    list_streetNames = Object.keys(result)
+
+                    // Append the list to the form
+                    appendDataList(list_streetNames, 'datalist-street-names')
+                })
+            }
+        })
+    });
+    enableOnValidation(input_PostalCode, input_StreetName)
+
+    // Street Name event listener
+    input_StreetName.addEventListener('input',
+        () => {onInput(input_StreetName, list_streetNames, (result) => {
+
+            if (result) {
+
+                // Save the chosen street name
+                streetId = dict_streetNames[result]
+
+                // Fetch the house number file
+                fetchJSON('/web/' + postalCode + '/' + streetId + '.json', (result) => {
+                    dict_houseNumbers = result
+                    list_houseNumbers = Object.keys(result)
+
+                    // Append the list to the form
+                    appendDataList(list_houseNumbers, 'datalist-house-numbers')
+                })
+            }
+        })
+    });
+    enableOnValidation(input_StreetName, input_HouseNumber)
+
+    // House Number event listener
+    input_HouseNumber.addEventListener('input',
+        () => {onInput(input_HouseNumber, list_houseNumbers, (result) => {
+
+            if (result) {
+
+                // Save the chosen house number
+                houseId = dict_houseNumbers[result]
+                button_submit.disabled = false
+            }
+        })
+    });
+
+    // Submit button event listener
+    button_submit.addEventListener("click",
+        () => {
+
+            // Disable the button and set the load spinner
+            button_submit.disabled = true
+            button_loadSpinner.classList.remove('hidden')
+
+            // Submit the request
+
+
+        })
 }
 
-let fetchPostalCodes = (callback) => {
+let fetchJSON = (url, callback) => {
     /*
     Fetch the postal code list from the data API, and return it as a callback.
      */
 
-    fetch(DATA_API + '/web/postal_codes.json').then((response) => {
+    fetch(DATA_API + url).then((response) => {
         return response.json()
 
     }).then((json) => {
-        callback(json['postal_codes'])
+        callback(json)
     })
 }
 
@@ -47,25 +127,23 @@ let appendDataList = (list, dataListId) => {
     });
 }
 
-let validate = (list, input) => {
+let validate = (inputElement, list) => {
     /*
     Validate a given input with a given list.
      */
 
-    if (list.includes(parseInt(input.value))) {
+    if (list.includes(inputElement.value)) {
 
         // Display 'is valid'
-        input.classList.remove('is-invalid')
-        input.classList.add('is-valid')
+        inputElement.classList.remove('is-invalid')
+        inputElement.classList.add('is-valid')
         return true
 
     } else {
 
         // Display 'is invalid'
-        input.classList.remove('is-valid')
-        input.classList.add('is-invalid')
-
-        input.focus();
+        inputElement.classList.remove('is-valid')
+        inputElement.classList.add('is-invalid')
         return false;
     }
 }
@@ -88,23 +166,25 @@ let enableOnValidation = (element, toToggle) => {
 }
 
 
-let onInput = (element, list) => {
+let onInput = (element, list, callback) => {
     /*
     This function is automatically trigger the validation when a user
     finish to write in an input.
      */
 
-    const duration = 1000;
+    const duration = 300;
     clearTimeout(element._timer);
 
-    // Trigger the validate function after 1 second of user's inactivity.
+    // Trigger the validation after 1 second of user's inactivity.
     element._timer = setTimeout(() => {
-        validate(list, element);
+
+        if (validate(element, list)) {
+            callback(element.value)
+        } else {
+            callback(false)
+        }
+
         }, duration);
 }
-
-// Start event listeners
-input_PostalCode.addEventListener('input', () => {onInput(input_PostalCode, postalCodes)});
-enableOnValidation(input_PostalCode, input_StreetName)
 
 export {init};

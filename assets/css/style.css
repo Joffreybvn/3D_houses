@@ -54,3 +54,7 @@ canvas {
     margin-top: 15px;
     margin-bottom: 10px;
 }
+
+.hidden {
+    display: none;
+}

@@ -39,19 +39,27 @@
 
                             <div class="col-12">
                                 <label for="inputPostalCode" class="col-sm-2 col-form-label form-label">Postal Code</label>
-                                <input id="inputPostalCode" class="form-control" type="number" min="1000" max="9999" placeholder="6000" list="datalist-postal-code" autocomplete="off">
+                                <input id="inputPostalCode" class="form-control" type="text" placeholder="6000" list="datalist-postal-code" autocomplete="off">
+                                <div class="invalid-feedback">Please provide a valid postal code.</div>
                                 <datalist id="datalist-postal-code"></datalist>
                             </div>
                             <div class="col-12">
                                 <label for="inputStreetName" class="col-sm-2 col-form-label form-label">Street</label>
-                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" autocomplete="off" disabled>
+                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" list="datalist-street-names" autocomplete="off" disabled>
+                                <div class="invalid-feedback">Please provide a valid street name.</div>
+                                <datalist id="datalist-street-names"></datalist>
                             </div>
                             <div class="col-12">
                                 <label for="inputHouseNumber" class="col-sm-2 col-form-label form-label">Number</label>
-                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" autocomplete="off" disabled>
+                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" list="datalist-house-numbers" autocomplete="off" disabled>
+                                <div class="invalid-feedback">Please provide a valid house number.</div>
+                                <datalist id="datalist-house-numbers"></datalist>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary button-submit" disabled>Search address</button>
+                                <button id="button-submit" class="btn btn-primary btn-block button-submit" disabled>
+                                    <span class="spinner-border spinner-border-sm hidden" id='button-load-spinner' role="status" aria-hidden="true"></span>
+                                    Search address
+                                </button>
                             </div>
 
                         </li>
