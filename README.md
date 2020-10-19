@@ -21,3 +21,5 @@ Steps:
 DTM + Cadastre terrain -> Poisson -> Terrain.ply
 DTM + Cadastre Batiment -> BBox + z.max -> House.ply
 DSM - DTM = Vegetation -> Keep points -> Vegetation.pyc
+
+rclone rcd --rc-web-gui --rc-user=admin --rc-pass=pass --rc-serve
