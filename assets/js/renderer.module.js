@@ -1,7 +1,7 @@
 
-import * as THREE from './three.r119.module.js';
+import * as THREE from './libs/three.r119.module.js';
 import * as LOADERS from './loaders.module.js';
-import { TrackballControls } from './three/TrackballControls.module.js';
+import { TrackballControls } from './libs/three/TrackballControls.module.js';
 
 let canvas, renderer, scene, camera, controls;
 

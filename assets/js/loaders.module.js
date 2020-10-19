@@ -1,6 +1,6 @@
 
-import { PLYLoader } from './three/PLYLoader.module.js';
-import { PCDLoader } from './three/PCDLoader.module.js';
+import { PLYLoader } from './libs/three/PLYLoader.module.js';
+import { PCDLoader } from './libs/three/PCDLoader.module.js';
 
 const ply_loader = new PLYLoader();
 const pcd_loader = new PCDLoader();

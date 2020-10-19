@@ -39,15 +39,16 @@
 
                             <div class="col-12">
                                 <label for="inputPostalCode" class="col-sm-2 col-form-label form-label">Postal Code</label>
-                                <input id="inputPostalCode" class="form-control" type="number" min="1000" max="9999" placeholder="6000" autocomplete="off">
+                                <input id="inputPostalCode" class="form-control" type="number" min="1000" max="9999" placeholder="6000" list="datalist-postal-code" autocomplete="off">
+                                <datalist id="datalist-postal-code"></datalist>
                             </div>
                             <div class="col-12">
                                 <label for="inputStreetName" class="col-sm-2 col-form-label form-label">Street</label>
-                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" autocomplete="off">
+                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" autocomplete="off" disabled>
                             </div>
                             <div class="col-12">
                                 <label for="inputHouseNumber" class="col-sm-2 col-form-label form-label">Number</label>
-                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" autocomplete="off">
+                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" autocomplete="off" disabled>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary button-submit" disabled>Search address</button>
@@ -66,8 +67,8 @@
     </div>
 </div>
 
-<script type="text/javascript" src="./assets/js/jszip.min.js"></script>
-<script type="text/javascript" src="./assets/js/jszip-utils.min.js"></script>
+<script type="text/javascript" src="./assets/js/libs/jszip.min.js"></script>
+<script type="text/javascript" src="./assets/js/libs/jszip-utils.min.js"></script>
 
 <script type="x-shader/x-vertex" id="vertexShader">
     varying vec3 vWorldPosition;
@@ -99,49 +100,10 @@
 </script>
 
 <script type="module">
-    import * as renderer from './assets/js/renderer.js';
-
-    new JSZip.external.Promise((resolve, reject) => {
-
-        // Load the zip as binary file
-        JSZipUtils.getBinaryContent('./assets/3d/data.zip', (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
-    })
-        // Open the zip
-        .then((data) => {
-            return JSZip.loadAsync(data);
-        })
-
-        // Load the files
-        .then((zip) => {
-
-            // Load land.ply
-            zip.file("data/land.ply").async('arraybuffer').then((land) => {
-
-                // Load vegetation.pcd
-                zip.file("data/vegetation.pcd").async('arraybuffer').then((vegetation) => {
-
-                    // Load house.ply
-                    zip.file("data/house.ply").async('arraybuffer').then((house) => {
-
-                        // Load offsets.json
-                        zip.file("data/offsets.json").async("text").then((offsets) => {
-
-                            // Render the scene
-                            renderer.init(land, vegetation, house, JSON.parse(offsets))
-                            renderer.animate()
-                        })
-                    })
-                })
-            })
-        })
+    import * as app from './assets/js/app.module.js';
+    app.init()
 </script>
 
-<script type="text/javascript" src="./assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./assets/js/libs/bootstrap.min.js"></script>
 </body>
 </html>
