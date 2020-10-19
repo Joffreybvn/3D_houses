@@ -19,7 +19,7 @@ let init = (land, vegetation, house, offsets) => {
 
     // Camera's constants
     const fov = 70;
-    const aspect = window.innerWidth / window.innerHeight;  // 2 the canvas default
+    const aspect = window.innerWidth / window.innerHeight;
     const near = 0.1;
     const far = 10000;
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);

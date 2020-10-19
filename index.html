@@ -9,7 +9,8 @@
     <link rel="canonical" href="https://wallonia.ml">
     <title>Wallonia's 3D Houses</title>
 
-    <link href="./assets/css/bootstrap.css" rel="stylesheet">
+    <link href="./assets/css/bootstrap-reboot.min.css" rel="stylesheet">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="./assets/css/dashboard.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
 </head>
@@ -25,83 +26,41 @@
 
 <div class="container-fluid" id="content">
     <div class="row" id="content-row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <span data-feather="home"></span>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Customers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Reports
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
-                </ul>
 
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                    <a class="link-secondary" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Current month
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Last quarter
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Social engagement
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Year-end sale
-                        </a>
-                    </li>
-                </ul>
+                <div class="card">
+                    <h5 class="card-header">Type an address</h5>
+                    <div class="card-body">
+                        <p class="card-text">Display and get details abount any house in Wallonia by simply entering its address.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+
+                            <div class="col-12">
+                                <label for="inputPostalCode" class="col-sm-2 col-form-label form-label">Postal Code</label>
+                                <input id="inputPostalCode" class="form-control" type="number" min="1000" max="9999" placeholder="6000" autocomplete="off">
+                            </div>
+                            <div class="col-12">
+                                <label for="inputStreetName" class="col-sm-2 col-form-label form-label">Street</label>
+                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" autocomplete="off">
+                            </div>
+                            <div class="col-12">
+                                <label for="inputHouseNumber" class="col-sm-2 col-form-label form-label">Number</label>
+                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" autocomplete="off">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary button-submit" disabled>Search address</button>
+                            </div>
+
+                        </li>
+                      </ul>
+                </div>
+
             </div>
         </nav>
 
-        <main class="col-md-9 ml-sm-auto col-lg-10">
+        <main class="col-md-8 ml-sm-auto col-lg-9">
             <canvas id="render" width="100%" height="100%"></canvas>
         </main>
     </div>
@@ -182,5 +141,7 @@
             })
         })
 </script>
+
+<script type="text/javascript" src="./assets/js/bootstrap.min.js"></script>
 </body>
 </html>

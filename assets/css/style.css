@@ -45,3 +45,12 @@ canvas {
     height: 100%;
     max-height: 100%;
 }
+
+.form-label {
+    width: unset !important;
+}
+
+.button-submit {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
