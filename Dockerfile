@@ -1,12 +1,10 @@
 
-FROM python:3.8
+FROM python:3.8-slim-buster
+
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libgomp1
 
 COPY . /opt/app
 WORKDIR /opt/app
-
-RUN apt-get install -y libgl1-mesa-dev
-RUN pip install --upgrade pip
-RUN pip install --upgrade pipenv
 
 RUN pip install -r requirements.txt
 
