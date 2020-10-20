@@ -1,20 +1,14 @@
 
-FROM python:3.8-alpine
+FROM python:3.8
 
-COPY ./requirements.txt /app/requirements.txt
+COPY . /opt/app
+WORKDIR /opt/app
 
-WORKDIR /app
+RUN apt-get install -y libgl1-mesa-dev
+RUN pip install --upgrade pip
+RUN pip install --upgrade pipenv
 
-RUN apk add mesa mesa-gl mesa-dev
-RUN apk --update add python py-pip openssl ca-certificates py-openssl wget bash linux-headers
-RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-dev py-pip build-base \
-    && pip install --upgrade pip \
-    && pip install --upgrade pipenv\
-    && pip install --upgrade -r /app/requirements.txt\
-    && apk del build-dependencies
-
-COPY . /app
+RUN pip install -r requirements.txt
 
 ENTRYPOINT [ "python" ]
-
 CMD [ "main.py" ]
