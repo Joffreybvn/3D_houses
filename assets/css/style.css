@@ -67,3 +67,17 @@ canvas {
 .hidden {
     display: none;
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    background: rgba(255,255,255,0.7);
+    font-size: 11px;
+    text-align: center;
+    color: #333
+}
+
+footer a {
+    text-decoration: none;
+    color: #0078A8
+}
