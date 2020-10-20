@@ -6,6 +6,7 @@ import io
 
 from src.house3d.utils import FileFetcher, LZMAExtractor
 from src.config import config
+from src.house3d import JSONOffsets
 from src.house3d.modelers import LandModeler, VegetationModeler, HouseModeler
 
 
@@ -65,6 +66,7 @@ class Constructor:
             LandModeler(self.data['dtm_land_bounded'], self.data['dtm_land_bbox']).save(directory)
             VegetationModeler(self.data['dsm_vegetation']).save(directory)
             HouseModeler(self.data['dtm_house'], self.data['dsm_house']).save(directory)
+            JSONOffsets(self.data['translation_land'], self.data['translation_house']).save(directory)
 
             # Return all files into a compressed zip buffer
             return self.__create_zip(directory)
