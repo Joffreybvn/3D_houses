@@ -1,23 +1,22 @@
 language: python
 python:
   - 3.8
+services:
+  - docker
 
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 script:
   - python -m unittest tests/geocoder_test.py
+  - docker build -t joffreybvn/wallonia-ml-api:latest .
 
 deploy:
-  edge: true
-  provider: bluemixcloudfoundry
-  username: $IBM_USERNAME
-  password: $IBM_PASSWORD
-  organization: $IBM_ORGANIZATION
-  space: $IBM_ORGANIZATION_SPACE
-  manifest: manifest.yml
-  app_name: Wallonia-ml-API
-  region: eu-de
-  api: https://api.eu-de.cf.cloud.ibm.com
+  provider: script
+  script:
+    docker push joffreybvn/wallonia-ml-api:latest;
   on:
     branch: main
