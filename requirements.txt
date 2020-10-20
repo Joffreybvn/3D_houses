@@ -1,7 +1,7 @@
 flask
 flask_restx
-geopy
 werkzeug
-pymongo
-dnspython
+open3d==0.10.0.0
+requests
+numpy
 setuptools

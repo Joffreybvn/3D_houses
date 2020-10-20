@@ -1,43 +1,96 @@
 
 # Imports
+import lzma
+import os
+import tempfile
+from pickle import PickleError, UnpicklingError
 from flask import Response
 from flask_restx import Namespace, Resource
 
+from src.house3d import Constructor
+from src.house3d.utils import FetchError
 from src.api.utils import JSONResponse
-from src.geocoder import Geocoder
 
 # API documentation init
-api = Namespace('model', description='3D model interactions')
+api = Namespace('model', description='3D model creation.')
 
 
-@api.route('/<int:postal_code>/<string:street_name>/<string:house_number>')
+@api.route('/<int:house_id>/')
 class Status(Resource):
 
     @api.doc(responses={
-        200: 'Success',
-        400: 'Invalid address provided'
+        200: 'Request has succeeded',
+        404: 'The server can not find the requested resource',
+        500: 'The server encountered an unexpected error and could not perform the request'
     })
-    def get(self, postal_code: int, street_name: str, house_number: str):
+    def get(self, house_id: int):
         """
-        Return the API server status.
-        Return "Alive!" if this API server is online.
+        Return the 3D model of a house.
+        Return a 'application/zip' file with the files needed to render a house.
         """
 
-        # Geocode the address
-        geocoder = Geocoder(postal_code, street_name, house_number)
+        # Try to create a constructor Object with the given house id.
+        try:
+            constructor = Constructor(house_id)
 
-        # If the geocoding is a success, return tje coordinates.
-        if coordinates := geocoder.get_coordinates():
+        # Error: No file was returned from the data API with this house id.
+        except FetchError:
             return JSONResponse(
-                status_code=200,
-                message=str(coordinates),
-                data=None
-            ).get_response()
+                status_code=404,
+                message='No house was found with the given house id.')
 
-        # If the geocoding failed, return an error message.
+        # Error: The retrieved file could not be decompressed.
+        # https://docs.python.org/3/library/lzma.html#lzma.LZMADecompressor
+        except (lzma.LZMAError, EOFError):
+            return JSONResponse(
+                status_code=500,
+                message='An server error occurred during the decompression of '
+                        'the house data. Please contact an administrator.')
+
+        # Error: The retrieved and decompressed file could not be unpickled.
+        # https://docs.python.org/3.8/library/pickle.html#pickle.PickleError
+        except (PickleError, UnpicklingError, ImportError, AttributeError, IndexError):
+            return JSONResponse(
+                status_code=500,
+                message='An server error occurred during the reading of the '
+                        'house data. Please contact an administrator.')
+
+        # If the constructor creation succeeded, try to build the 3D objects
         else:
-            return JSONResponse(
-                status_code=400,
-                message="Invalid address provided.",
-                data=None
-            ).get_response()
+            try:
+                zip_file = constructor.build()
+
+            # Error: The temporary folder could not be created.
+            except tempfile.mkdtemp:
+                return JSONResponse(
+                    status_code=500,
+                    message='The temporary folder could not be created. '
+                            'Please contact an administrator.')
+
+            # Error: The buffer was handled incorrectly.
+            except (OSError, IOError):
+                return JSONResponse(
+                    status_code=500,
+                    message='The buffer was handled incorrectly. '
+                            'Please contact an administrator.')
+
+            # Error: The files could not be recovered after their creation.
+            except os.walk:
+                return JSONResponse(
+                    status_code=500,
+                    message='The files could not be recovered after their creation. '
+                            'Please contact an administrator.')
+
+            # Error: The files could not be compressed to a zip buffer.
+            except (ValueError, RuntimeError):
+                return JSONResponse(
+                    status_code=500,
+                    message='The files could not be compressed to a zip buffer. '
+                            'Please contact an administrator.')
+
+            else:
+                return Response(
+                    zip_file.read(),
+                    mimetype='application/zip',
+                    headers={'Content-Disposition': 'attachment; filename=data.zip'})
+

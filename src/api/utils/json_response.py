@@ -1,21 +1,18 @@
 
 class JSONResponse:
 
-    def __init__(self, status_code: int, message=None, data=None):
+    def __init__(self, status_code: int, message: str):
         """
         Generate a Dictionary response to send with Flask, which will
         automatically convert is into a JSON.
 
         :param status_code: HTTP status of the response.
-        :param data: The data to send.
         """
         self.status_code = status_code
 
         # Generate an outcome and a status message from the status code.
         self.outcome = self.__create_outcome(status_code)
-        self.status_message = self.__create_status_message(message, status_code)
-
-        self.data = data
+        self.status_message = message
 
     @staticmethod
     def __create_outcome(status_code) -> bool:
@@ -30,17 +27,7 @@ class JSONResponse:
 
         return False
 
-    @staticmethod
-    def __create_status_message(message, status_code) -> str:
-        """Create and return a status message from a given status code."""
-
-        if message is not None:
-            return message
-
-        else:
-            return ''
-
-    def get_response(self):
+    def response(self):
         """
         Generate a Dictionary response to be send with Flask.
         Flask will automatically transform it into JSON.
@@ -49,5 +36,4 @@ class JSONResponse:
         return {
             'status': self.outcome,
             'message': self.status_message,
-            'data': self.data
         }, self.status_code
