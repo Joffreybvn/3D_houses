@@ -15,7 +15,7 @@ const button_submit = document.getElementById('button-submit')
 const button_loadSpinner = document.getElementById('button-load-spinner')
 
 
-let init = () => {
+let init = (callback) => {
 
     // Fetch the Postal code list
     fetchJSON('/web/postal_codes.json', (result) => {
@@ -94,9 +94,11 @@ let init = () => {
             button_submit.disabled = true
             button_loadSpinner.classList.remove('hidden')
 
-            // Submit the request
+            // Render the house
+            callback(houseId)
 
-
+            // Reset the submit button
+            button_loadSpinner.classList.add('hidden')
         })
 }
 

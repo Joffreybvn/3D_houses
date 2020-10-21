@@ -3,21 +3,19 @@ import * as renderer from './renderer.module.js';
 import * as form from './form.module.js';
 
 let init = () => {
-    manageForm()
-    displayHouse()
-}
-
-let manageForm = () => {
-    form.init()
+    form.init((houseId) => {
+        displayHouse(houseId)
+    })
 }
 
 
-let displayHouse = () => {
+let displayHouse = (houseId) => {
+    console.log(houseId)
 
     new JSZip.external.Promise((resolve, reject) => {
 
         // Load the zip as binary file
-        JSZipUtils.getBinaryContent('./assets/3d/data.zip', (err, data) => {
+        JSZipUtils.getBinaryContent('https://api.wallonia.ml/v1/model/' + houseId + '/', (err, data) => {
             if (err) {
                 reject(err);
             } else {
@@ -34,16 +32,16 @@ let displayHouse = () => {
         .then((zip) => {
 
             // Load land.ply
-            zip.file("data/land.ply").async('arraybuffer').then((land) => {
+            zip.file("land.ply").async('arraybuffer').then((land) => {
 
                 // Load vegetation.pcd
-                zip.file("data/vegetation.pcd").async('arraybuffer').then((vegetation) => {
+                zip.file("vegetation.pcd").async('arraybuffer').then((vegetation) => {
 
                     // Load house.ply
-                    zip.file("data/house.ply").async('arraybuffer').then((house) => {
+                    zip.file("house.ply").async('arraybuffer').then((house) => {
 
                         // Load offsets.json
-                        zip.file("data/offsets.json").async("text").then((offsets) => {
+                        zip.file("offsets.json").async("text").then((offsets) => {
 
                             // Render the scene
                             renderer.init(land, vegetation, house, JSON.parse(offsets))
