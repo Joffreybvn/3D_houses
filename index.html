@@ -7,10 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="Joffrey Bienvenu">
     <link rel="canonical" href="https://wallonia.ml">
-    <title>Wallonia's 3D Houses</title>
+    <title>Wallonia.ml - See your house in 3D !</title>
 
-    <link rel="icon" href="./assets/img/logo.svg">
-    <link rel="mask-icon" href="./assets/img/logo.svg" color="#000000">
+    <link rel="icon" href="./assets/img/favicon.svg">
+    <link rel="mask-icon" href="./assets/img/favicon.svg" color="#000000">
 
     <link href="./assets/css/bootstrap-reboot.min.css" rel="stylesheet">
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
@@ -73,11 +73,17 @@
         </nav>
 
         <main class="col-md-8 ml-sm-auto col-lg-9">
-            <canvas id="render" width="100%" height="100%"></canvas>
+
+            <div id="canvas-placeholder">
+                <div class="spinner-grow" style="width: 10rem; height: 10rem;" role="status"></div>
+            </div>
+            <div id="canvas-wrapper">
+                <canvas id="render" width="100%" height="100%"></canvas>
+            </div>
         </main>
 
         <footer>
-            © Joffrey Bienvenu, <a href="https://github.com/joffreybvn/">get in touch</a> - Data source: <a href="http://geoportail.wallonie.be/">Service public de Wallonie</a>
+            © Joffrey Bienvenu, <a href="mailto:contact@wallonia.ml">get in touch</a> - <a href="https://github.com/Joffreybvn/wallonia-ml">Fork me on Github</a> - Data source: <a href="http://geoportail.wallonie.be/">Service public de Wallonie</a>
         </footer>
     </div>
 </div>

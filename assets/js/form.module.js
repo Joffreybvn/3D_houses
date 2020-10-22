@@ -17,6 +17,9 @@ const input_HouseNumber = document.getElementById('inputHouseNumber')
 const button_submit = document.getElementById('button-submit')
 const button_loadSpinner = document.getElementById('button-load-spinner')
 
+const canvas_placeholder = document.getElementById('canvas-placeholder')
+const canvas_wrapper = document.getElementById('canvas-wrapper');
+
 
 let init = (callback) => {
 
@@ -228,6 +231,13 @@ let lockForm = () => {
     // Disable the search button and set the load spinner
     button_submit.disabled = true
     button_loadSpinner.classList.remove('hidden')
+
+    // Show the loading placeholder
+    canvas_placeholder.style.display = 'flex'
+    canvas_placeholder.classList.add('canvas-loading')
+
+    // Hide the canvas
+    canvas_wrapper.style.visibility = 'hidden'
 }
 
 let unlockForm = () => {
@@ -239,6 +249,13 @@ let unlockForm = () => {
     // Enable the search button and remove the load spinner
     button_submit.disabled = false
     button_loadSpinner.classList.add('hidden')
+
+    // Hide the loading placeholder
+    canvas_placeholder.style.display = 'none'
+    canvas_placeholder.classList.remove('canvas-loading')
+
+    // Display the canvas
+    canvas_wrapper.style.visibility = 'unset'
 }
 
 export {init, lockForm, unlockForm};
