@@ -10,7 +10,6 @@ let init = () => {
 
 
 let displayHouse = (houseId) => {
-    console.log(houseId)
 
     new JSZip.external.Promise((resolve, reject) => {
 
