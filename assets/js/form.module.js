@@ -6,6 +6,9 @@ let dict_postalCodes, list_postalCodes, postalCode,
     dict_streetNames, list_streetNames, streetId,
     dict_houseNumbers, list_houseNumbers, houseId;
 
+let ref_streetNames = [list_streetNames]
+let ref_houseNumbers = [list_houseNumbers]
+
 // Link html document
 const input_PostalCode = document.getElementById('inputPostalCode')
 const input_StreetName = document.getElementById('inputStreetName')
@@ -25,7 +28,6 @@ let init = (callback) => {
 
         // Append the list to the form
         appendDataList(list_postalCodes, 'datalist-postal-code')
-
     })
 
 
@@ -38,10 +40,16 @@ let init = (callback) => {
                 // Save the chosen postal code
                 postalCode = dict_postalCodes[result]
 
+                // Reset the house number datalist
+                dict_streetNames = undefined
+                list_streetNames = undefined
+                clearDataList('datalist-street-names')
+
                 // Fetch the street name file
                 fetchJSON('/web/' + postalCode + '.json', (result) => {
                     dict_streetNames = result
                     list_streetNames = Object.keys(result)
+                    ref_streetNames[0] = list_streetNames
 
                     // Append the list to the form
                     appendDataList(list_streetNames, 'datalist-street-names')
@@ -49,7 +57,7 @@ let init = (callback) => {
             }
         })
     });
-    enableOnValidation(input_PostalCode, input_StreetName)
+    enableOnValidation(input_PostalCode, input_StreetName, ref_streetNames)
 
     // Street Name event listener
     input_StreetName.addEventListener('input',
@@ -60,10 +68,16 @@ let init = (callback) => {
                 // Save the chosen street name
                 streetId = dict_streetNames[result]
 
+                // Reset the house number datalist
+                dict_houseNumbers = undefined
+                list_houseNumbers = undefined
+                clearDataList('datalist-house-numbers')
+
                 // Fetch the house number file
                 fetchJSON('/web/' + postalCode + '/' + streetId + '.json', (result) => {
                     dict_houseNumbers = result
                     list_houseNumbers = Object.keys(result)
+                    ref_houseNumbers[0] = list_houseNumbers
 
                     // Append the list to the form
                     appendDataList(list_houseNumbers, 'datalist-house-numbers')
@@ -71,7 +85,7 @@ let init = (callback) => {
             }
         })
     });
-    enableOnValidation(input_StreetName, input_HouseNumber)
+    enableOnValidation(input_StreetName, input_HouseNumber, ref_houseNumbers)
 
     // House Number event listener
     input_HouseNumber.addEventListener('input',
@@ -90,15 +104,10 @@ let init = (callback) => {
     button_submit.addEventListener("click",
         () => {
 
-            // Disable the button and set the load spinner
-            button_submit.disabled = true
-            button_loadSpinner.classList.remove('hidden')
+            lockForm()
 
             // Render the house
             callback(houseId)
-
-            // Reset the submit button
-            button_loadSpinner.classList.add('hidden')
         })
 }
 
@@ -129,6 +138,14 @@ let appendDataList = (list, dataListId) => {
     });
 }
 
+let clearDataList = (dataListId) => {
+    /*
+    Remove all element of a given datalist.
+     */
+
+    document.getElementById(dataListId).innerHTML = '';
+}
+
 let validate = (inputElement, list) => {
     /*
     Validate a given input with a given list.
@@ -150,31 +167,44 @@ let validate = (inputElement, list) => {
     }
 }
 
-let enableOnValidation = (element, toToggle) => {
+let enableOnValidation = (toValidate, toToggle, toToggleData) => {
     /*
-    Enable a given 'toToggle' input if the 'element' input is valid.
+    Enable a given 'toToggle' input if the 'toValidate' input is valid.
      */
 
     new MutationObserver(() => {
 
-        if (element.classList.contains('is-valid')) {
-            toToggle.disabled = false
+        // Check every 50ms if the data for the toToggle input was fetched.
+        const interval = setInterval(() => {
 
-        } else if (element.classList.contains('is-invalid')) {
-            toToggle.disabled = true
-        }
+            if (toToggleData[0] === undefined) {
+                return
+            }
 
-    }).observe(element, {attributes: true})
+            else {
+                clearInterval(interval);
+
+                if (toValidate.classList.contains('is-valid')) {
+                    toToggle.disabled = false
+
+                } else if (toValidate.classList.contains('is-invalid')) {
+                    toToggle.disabled = true
+                }
+            }
+            }, 10);
+
+    }).observe(toValidate, {attributes: true})
 }
 
 
 let onInput = (element, list, callback) => {
     /*
     This function is automatically trigger the validation when a user
-    finish to write in an input.
+    finish to write in an input. Return the value of the input if it
+    was validated.
      */
 
-    const duration = 300;
+    const duration = 150;
     clearTimeout(element._timer);
 
     // Trigger the validation after 1 second of user's inactivity.
@@ -189,4 +219,26 @@ let onInput = (element, list, callback) => {
         }, duration);
 }
 
-export {init};
+let lockForm = () => {
+
+    input_PostalCode.disabled = true
+    input_StreetName.readOnly = true
+    input_HouseNumber.readOnly = true
+
+    // Disable the search button and set the load spinner
+    button_submit.disabled = true
+    button_loadSpinner.classList.remove('hidden')
+}
+
+let unlockForm = () => {
+
+    input_PostalCode.disabled = false
+    input_StreetName.readOnly = false
+    input_HouseNumber.readOnly = false
+
+    // Enable the search button and remove the load spinner
+    button_submit.disabled = false
+    button_loadSpinner.classList.add('hidden')
+}
+
+export {init, lockForm, unlockForm};

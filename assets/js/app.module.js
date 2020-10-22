@@ -1,15 +1,35 @@
 
+import * as share from './share.module.js';
 import * as renderer from './renderer.module.js';
 import * as form from './form.module.js';
 
 let init = () => {
-    form.init((houseId) => {
-        displayHouse(houseId)
+
+    share.onPageLoad((error, houseId) => {
+
+        // If this page is not opened with a sharing link, execute the page normally.
+        if (error) {
+
+            form.init((houseId) => {
+                displayHouse(houseId, () => {
+                    form.unlockForm()
+                })
+            })
+        }
+
+        // If the page is opened with a sharing link, display the house.
+        else {
+            form.lockForm()
+
+            displayHouse(houseId, () => {
+                form.unlockForm()
+            })
+        }
     })
 }
 
 
-let displayHouse = (houseId) => {
+let displayHouse = (houseId, onRenderingComplete) => {
 
     new JSZip.external.Promise((resolve, reject) => {
 
@@ -42,8 +62,13 @@ let displayHouse = (houseId) => {
                         // Load offsets.json
                         zip.file("offsets.json").async("text").then((offsets) => {
 
-                            // Render the scene
+                            // Init the scene rendering
                             renderer.init(land, vegetation, house, JSON.parse(offsets))
+
+                            // Return a callback when the init is complete
+                            onRenderingComplete(true)
+
+                            // Keep the scene up to date
                             renderer.animate()
                         })
                     })
