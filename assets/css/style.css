@@ -93,6 +93,10 @@ canvas {
     background-color: transparent !important;
 }
 
+.li-tab {
+    padding: 0 !important;
+}
+
 .card-search {
     box-shadow: 0 0 0.5rem rgba(0,0,0,.3) !important;
 }
@@ -108,6 +112,29 @@ canvas {
 
 .hidden {
     display: none;
+}
+
+.street-wrapper {
+    display: flex;
+}
+
+.street-col {
+    flex: 1;
+}
+
+.street-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.street-button > button {
+    height: 37px;
+}
+
+#house-map {
+    height: 300px;
+    width: 100%;
 }
 
 #sharing-card {

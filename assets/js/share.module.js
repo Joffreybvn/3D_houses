@@ -1,5 +1,5 @@
 
-const card_share = document.getElementById('sharing-card')
+const share_tab = document.getElementById('share-tab')
 const input_share = document.getElementById('sharing-link')
 const button_share = document.getElementById('button-sharing-link')
 
@@ -70,21 +70,22 @@ let displayShareData = (houseID) => {
     const url = 'https://wallonia.ml/?id=' + houseID
 
     // Update the page URL with the houseId
+    /*
     history.pushState({
         id: 'wallonia-ml'
     }, 'Wallonia.ml - Address', url);
-
+*/
     // Set the sharing link
     input_share.value = url
 
-    // Display the sharing card
-    card_share.classList.remove('hidden')
+    // Make the tab available
+    share_tab.classList.remove('disabled')
 }
 
 let hideShareData = () => {
 
-    // Hide the sharing card
-    card_share.classList.add('hidden')
+    // Lock the tab
+    share_tab.classList.add('disabled')
 }
 
 export {onPageLoad, displayShareData, hideShareData};

@@ -16,6 +16,9 @@
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="./assets/css/dashboard.css" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
+    <link href="./assets/css/leaflet.css" rel="stylesheet">
+
+    <script type="text/javascript" src="./assets/js/libs/leaflet.js"></script>
 </head>
 <body>
 
@@ -33,56 +36,85 @@
             <div class="position-sticky pt-3">
 
                 <div class="card card-search">
-                    <h5 class="card-header">Type an address</h5>
-                    <div class="card-body">
-                        <p class="card-text">Display and get details about any house and apartment in Wallonia by simply entering an address.</p>
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected="true">Search</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link disabled" id="map-tab" data-toggle="tab" href="#map" role="tab" aria-controls="map" aria-selected="false">Location</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link disabled" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="false">Details</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link disabled" id="share-tab" data-toggle="tab" href="#share" role="tab" aria-controls="share" aria-selected="false">Share</a>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-
-                            <div class="col-12">
-                                <label for="inputPostalCode" class="col-sm-2 col-form-label form-label">Postal Code</label>
-                                <input id="inputPostalCode" class="form-control" type="text" placeholder="6000" list="datalist-postal-code" autocomplete="off">
-                                <div class="invalid-feedback">Please provide a valid postal code.</div>
-                                <datalist id="datalist-postal-code"></datalist>
-                            </div>
-                            <div class="col-12">
-                                <label for="inputStreetName" class="col-sm-2 col-form-label form-label">Street</label>
-                                <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" list="datalist-street-names" autocomplete="off" disabled>
-                                <div class="invalid-feedback">Please provide a valid street name.</div>
-                                <datalist id="datalist-street-names"></datalist>
-                            </div>
-                            <div class="col-12">
-                                <label for="inputHouseNumber" class="col-sm-2 col-form-label form-label">Number</label>
-                                <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" list="datalist-house-numbers" autocomplete="off" disabled>
-                                <div class="invalid-feedback">Please provide a valid house number.</div>
-                                <datalist id="datalist-house-numbers"></datalist>
-                            </div>
-                            <div class="col-12">
-                                <button id="button-submit" class="btn btn-primary btn-block button-submit" disabled>
-                                    Search address
-                                </button>
-                            </div>
-
-                        </li>
-                      </ul>
-                </div>
-
-                <div id="sharing-card" class="card card-search hidden">
                     <div class="card-body">
-                        <h5 class="form-label">Share this house</h5>
-                        <div class="input-group">
-                            <input type="url" id="sharing-link" class="form-control" aria-describedby="inputGroup-sizing-sm" readonly>
-                            <button class="btn btn-outline-secondary" type="button" id="button-sharing-link">Copy link</button>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+                                <p class="card-text">Display and get details about any house and apartment in Wallonia by simply entering an address.</p>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item li-tab">
+                                        <div class="col-12">
+                                            <label for="inputPostalCode" class="col-sm-2 col-form-label form-label">Postal Code</label>
+                                            <input id="inputPostalCode" class="form-control" type="text" placeholder="6000" list="datalist-postal-code" autocomplete="off">
+                                            <div class="invalid-feedback">Please provide a valid postal code.</div>
+                                            <datalist id="datalist-postal-code"></datalist>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="inputStreetName" class="col-sm-2 col-form-label form-label">Street</label>
+                                            <input id="inputStreetName" class="form-control" type="text" placeholder="Square des Martyrs" list="datalist-street-names" autocomplete="off" disabled>
+                                            <div class="invalid-feedback">Please provide a valid street name.</div>
+                                            <datalist id="datalist-street-names"></datalist>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="inputHouseNumber" class="col-sm-2 col-form-label form-label">Number</label>
+                                            <input id="inputHouseNumber" class="form-control" type="text" placeholder="1" list="datalist-house-numbers" autocomplete="off" disabled>
+                                            <div class="invalid-feedback">Please provide a valid house number.</div>
+                                            <datalist id="datalist-house-numbers"></datalist>
+                                        </div>
+                                        <div class="col-12">
+                                            <button id="button-submit" class="btn btn-primary btn-block button-submit" disabled>
+                                                Show house
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-pane fade" id="map" role="tabpanel" aria-labelledby="map-tab">
+                                <div class="street-wrapper">
+                                    <div class="street-col">
+                                        <h5 class="card-title">Rue de la Poste, 5</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">1435 Mont-Saint-Guibert</h6>
+                                    </div>
+                                    <div class="street-button">
+                                        <button type="button" class="btn btn-primary">See on Map</button>
+                                    </div>
+                                </div>
+                                <div id="house-map"></div>
+                            </div>
+                            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">3</div>
+
+                            <div class="tab-pane fade" id="share" role="tabpanel" aria-labelledby="share-tab">
+                                <h5 class="form-label">Share this house</h5>
+                                <div class="input-group">
+                                    <input type="url" id="sharing-link" class="form-control" aria-describedby="inputGroup-sizing-sm" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="button-sharing-link">Copy link</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-
             </div>
         </nav>
 
         <main class="col-md-8 ml-sm-auto col-lg-9">
-
             <div id="canvas-placeholder">
                 <div class="spinner-border spinner-border-sm" style="width: 10rem; height: 10rem;" role="status"></div>
             </div>
@@ -92,7 +124,7 @@
         </main>
 
         <footer>
-            © Joffrey Bienvenu, <a href="mailto:contact@wallonia.ml">get in touch</a> - <a href="https://github.com/Joffreybvn/wallonia-ml">Fork me on Github</a> - Data source: <a href="http://geoportail.wallonie.be/">Service public de Wallonie</a>
+            © Joffrey Bienvenu, <a href="mailto:joffreybvn@gmail.com">get in touch</a> - Data source: <a href="http://geoportail.wallonie.be/">Service public de Wallonie</a>
         </footer>
     </div>
 </div>

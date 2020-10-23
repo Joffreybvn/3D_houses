@@ -1,5 +1,6 @@
 
 import * as share from './share.module.js';
+import * as map from './map.module.js';
 
 // Define constants
 const DATA_API = "https://data.wallonia.ml/file/wallonia-lidar"
@@ -107,8 +108,11 @@ let init = (callback) => {
     button_submit.addEventListener("click",
         () => {
 
-            // Hide the share card and block the form
+            // Hide the share and map tab
             share.hideShareData()
+            map.lockMap()
+
+            // Lock the form
             lockForm()
 
             // Render the house

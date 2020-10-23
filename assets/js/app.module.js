@@ -2,10 +2,14 @@
 import * as share from './share.module.js';
 import * as renderer from './renderer.module.js';
 import * as form from './form.module.js';
+import * as map from './map.module.js';
 
 let init = () => {
 
     share.onPageLoad((error, houseId) => {
+
+        // Init the map
+        map.init()
 
         // If this page is not opened with a sharing link, execute the page normally.
         if (error) {
@@ -66,8 +70,9 @@ let displayHouse = (houseId, onRenderingComplete) => {
                             // Render the scene
                             renderer.animate()
 
-                            // Display the sharing module
+                            // Display the share and map tab
                             share.displayShareData(houseId)
+                            map.unlockMap()
                         })
                     })
                 })
