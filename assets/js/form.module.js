@@ -1,4 +1,6 @@
 
+import * as share from './share.module.js';
+
 // Define constants
 const DATA_API = "https://data.wallonia.ml/file/wallonia-lidar"
 
@@ -15,8 +17,6 @@ const input_StreetName = document.getElementById('inputStreetName')
 const input_HouseNumber = document.getElementById('inputHouseNumber')
 
 const button_submit = document.getElementById('button-submit')
-const button_loadSpinner = document.getElementById('button-load-spinner')
-
 const canvas_placeholder = document.getElementById('canvas-placeholder')
 const canvas_wrapper = document.getElementById('canvas-wrapper');
 
@@ -107,6 +107,8 @@ let init = (callback) => {
     button_submit.addEventListener("click",
         () => {
 
+            // Hide the share card and block the form
+            share.hideShareData()
             lockForm()
 
             // Render the house
@@ -228,9 +230,8 @@ let lockForm = () => {
     input_StreetName.readOnly = true
     input_HouseNumber.readOnly = true
 
-    // Disable the search button and set the load spinner
+    // Disable the search button
     button_submit.disabled = true
-    button_loadSpinner.classList.remove('hidden')
 
     // Show the loading placeholder
     canvas_placeholder.style.display = 'flex'
@@ -246,9 +247,8 @@ let unlockForm = () => {
     input_StreetName.readOnly = false
     input_HouseNumber.readOnly = false
 
-    // Enable the search button and remove the load spinner
+    // Enable the search button
     button_submit.disabled = false
-    button_loadSpinner.classList.add('hidden')
 
     // Hide the loading placeholder
     canvas_placeholder.style.display = 'none'

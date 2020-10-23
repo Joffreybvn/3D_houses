@@ -1,4 +1,8 @@
 
+const card_share = document.getElementById('sharing-card')
+const input_share = document.getElementById('sharing-link')
+const button_share = document.getElementById('button-sharing-link')
+
 let onPageLoad = (callback) => {
     /*
     Detect if the opened webpage come from a shared link.
@@ -8,6 +12,18 @@ let onPageLoad = (callback) => {
     // Get the parameters stored in the URL
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+
+    // Add event listener on share input click
+    input_share.addEventListener('click', () => {
+        focusInputShare()
+    })
+
+    // Add event listener on share button click
+    button_share.addEventListener('click', () => {
+
+        focusInputShare()
+        document.execCommand("copy");
+    })
 
     if (hasHouseIdParameter) {
 
@@ -34,6 +50,14 @@ let onPageLoad = (callback) => {
     callback(true, undefined)
 }
 
+let focusInputShare = () => {
+
+    // Focus and highlight the input content
+    input_share.focus();
+    input_share.select();
+    input_share.setSelectionRange(0, input_share.value.length)
+}
+
 let hasHouseIdParameter = (urlParams) => {
     /*
     Return true if the urlParams has a houseId parameter.
@@ -41,4 +65,26 @@ let hasHouseIdParameter = (urlParams) => {
     return !!urlParams.has('id');
 }
 
-export {onPageLoad};
+let displayShareData = (houseID) => {
+
+    const url = 'https://wallonia.ml/?id=' + houseID
+
+    // Update the page URL with the houseId
+    history.pushState({
+        id: 'wallonia-ml'
+    }, 'Wallonia.ml - Address', url);
+
+    // Set the sharing link
+    input_share.value = url
+
+    // Display the sharing card
+    card_share.classList.remove('hidden')
+}
+
+let hideShareData = () => {
+
+    // Hide the sharing card
+    card_share.classList.add('hidden')
+}
+
+export {onPageLoad, displayShareData, hideShareData};

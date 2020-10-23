@@ -110,6 +110,14 @@ canvas {
     display: none;
 }
 
+#sharing-card {
+    margin-top: 10px;
+}
+
+#sharing-link {
+    background-color: transparent !important;
+}
+
 footer {
     position: fixed;
     bottom: 0;

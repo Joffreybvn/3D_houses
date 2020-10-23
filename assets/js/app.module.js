@@ -11,19 +11,14 @@ let init = () => {
         if (error) {
 
             form.init((houseId) => {
-                displayHouse(houseId, () => {
-                    form.unlockForm()
-                })
+                displayHouse(houseId)
             })
         }
 
         // If the page is opened with a sharing link, display the house.
         else {
             form.lockForm()
-
-            displayHouse(houseId, () => {
-                form.unlockForm()
-            })
+            displayHouse(houseId)
         }
     })
 }
@@ -65,11 +60,14 @@ let displayHouse = (houseId, onRenderingComplete) => {
                             // Init the scene rendering
                             renderer.init(land, vegetation, house, JSON.parse(offsets))
 
-                            // Return a callback when the init is complete
-                            onRenderingComplete(true)
+                            // Display the canvas
+                            form.unlockForm()
 
-                            // Keep the scene up to date
+                            // Render the scene
                             renderer.animate()
+
+                            // Display the sharing module
+                            share.displayShareData(houseId)
                         })
                     })
                 })
