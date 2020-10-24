@@ -53,7 +53,6 @@ let displayMap = () => {
 
     setTimeout(() => {
         map.invalidateSize();
-        console.log('map size reset')
     }, 200)
 }
 
