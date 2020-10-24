@@ -97,6 +97,54 @@ canvas {
     padding: 0 !important;
 }
 
+.nav-item {
+    flex: 1;
+}
+
+#search-tab > .nav-icon-container {
+    background-image: url(../img/card/search-location.svg);
+}
+
+#map-tab > .nav-icon-container {
+    background-image: url(../img/card/map-marked-alt.svg);
+}
+
+#details-tab > .nav-icon-container {
+    background-image: url(../img/card/info-square.svg);
+}
+
+#share-tab > .nav-icon-container {
+    background-image: url(../img/card/share-alt.svg);
+}
+
+.nav-link {
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0.5rem 0 !important;
+}
+
+.nav-link.active > .nav-icon-container {
+    filter: invert(32%) sepia(82%) saturate(3104%) hue-rotate(199deg) brightness(101%) contrast(108%);
+}
+
+.nav-link.disabled > .nav-icon-container {
+    filter: invert(100%) sepia(0%) saturate(3790%) hue-rotate(52deg) brightness(109%) contrast(70%);
+}
+
+.nav-link > .nav-icon-container {
+    filter: invert(58%) sepia(50%) saturate(0%) hue-rotate(266deg) brightness(89%) contrast(88%);
+}
+
+.nav-icon-container {
+    display: block;
+    height: 32px;
+    width: 100%;
+    max-width: 32px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
 .card-search {
     box-shadow: 0 0 0.5rem rgba(0,0,0,.3) !important;
 }
