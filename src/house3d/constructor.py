@@ -66,7 +66,7 @@ class Constructor:
             LandModeler(self.data['dtm_land_bounded'], self.data['dtm_land_bbox']).save(directory)
             VegetationModeler(self.data['dsm_vegetation']).save(directory)
             HouseModeler(self.data['dtm_house'], self.data['dsm_house']).save(directory)
-            JSONMetadata(self.data['translation_land'], self.data['translation_house'], self.data['meta']).save(directory)
+            JSONMetadata(self.data['translation_land'], self.data['translation_house'], self.data['meta'], self.data['details']).save(directory)
 
             # Return all files into a compressed zip buffer
             return self.__create_zip(directory)
