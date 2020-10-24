@@ -3,13 +3,15 @@ import * as share from './share.module.js';
 import * as renderer from './renderer.module.js';
 import * as form from './form.module.js';
 import * as map from './map.module.js';
+import * as details from './details.module.js';
 
 let init = () => {
 
     share.onPageLoad((error, houseId) => {
 
-        // Init the map
+        // Map and details tab init
         map.init()
+        details.init()
 
         // If this page is not opened with a sharing link, execute the page normally.
         if (error) {
@@ -72,9 +74,12 @@ let displayHouse = (houseId, onRenderingComplete) => {
                             // Render the scene
                             renderer.animate()
 
-                            // Display the share and map tab
+                            // Display the share, map and details tab
                             share.displayShareData(houseId)
                             map.unlockMap(json.meta)
+
+                            details.addDetails(json.details)
+                            details.resetCheckBoxes()
                         })
                     })
                 })

@@ -49,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link disabled" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="false">
+                                <a class="nav-link" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="false">
                                     <div class="nav-icon-container"></div>
                                 </a>
                             </li>
@@ -106,7 +106,46 @@
                                 </div>
                                 <div id="house-map"></div>
                             </div>
-                            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">3</div>
+
+                            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+                                <table class="table">
+                                    <tbody>
+                                        <tr title="Land area">
+                                            <th scope="row" class="detail-icon">
+                                                <img src="./assets/img/card/chart-area.svg" height="32px" alt="Land area"/>
+                                            </th>
+                                            <td class="detail-text" id="area-land">1192 m²</td>
+                                        </tr>
+                                        <tr title="House area">
+                                            <th scope="row" class="detail-icon">
+                                                <img src="./assets/img/card/expand.svg" height="32px" alt="House area"/>
+                                            </th>
+                                            <td class="detail-text" id="area-house">90 m²</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Hide and show elements:</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="button-landMesh" checked>
+                                            <label class="form-check-label" for="button-landMesh">Display land</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="button-landLines" checked>
+                                            <label class="form-check-label" for="button-landLines">Display land skeleton</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="button-vegetation" checked>
+                                            <label class="form-check-label" for="button-vegetation">Display vegetation</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="button-house" checked>
+                                            <label class="form-check-label" for="button-house">Display house</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="tab-pane fade" id="share" role="tabpanel" aria-labelledby="share-tab">
                                 <h5 class="form-label">Share this house</h5>

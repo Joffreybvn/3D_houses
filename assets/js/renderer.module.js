@@ -3,7 +3,8 @@ import * as THREE from './libs/three.r119.module.js';
 import * as LOADERS from './loaders.module.js';
 import { TrackballControls } from './libs/three/TrackballControls.module.js';
 
-let canvas, renderer, scene, camera, controls;
+let canvas, renderer, scene, camera, controls,
+    mesh_land, lines_land, mesh_house, points_vegetation;
 
 let init = (land, vegetation, house, offsets) => {
 
@@ -105,19 +106,19 @@ let init = (land, vegetation, house, offsets) => {
 
         // Set mesh color and set double side (avoid see through)
         const material = new THREE.MeshBasicMaterial({color: 0x567d46, side: THREE.DoubleSide});
-        const mesh = new THREE.Mesh(geometry, material);
+        mesh_land = new THREE.Mesh(geometry, material);
 
         // Allow shadow
-        mesh.receiveShadow = true;
-        mesh.rotation.x = x_rotation
+        mesh_land.receiveShadow = true;
+        mesh_land.rotation.x = x_rotation
 
         // Display edge lines
         const edges = new THREE.EdgesGeometry(geometry);
-        const lines = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0x3e5d32}));
-        lines.rotation.x = x_rotation
+        lines_land = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: 0x3e5d32}));
+        lines_land.rotation.x = x_rotation
 
-        scene.add(lines);
-        scene.add(mesh);
+        scene.add(lines_land);
+        scene.add(mesh_land);
     })
 
     // Load house PLY
@@ -126,31 +127,30 @@ let init = (land, vegetation, house, offsets) => {
         // Set mesh color and set double side (avoid see through)
         const material = new THREE.MeshPhongMaterial({color: 0x7c818b, specular: 0x7d4031, shininess: 10, flatShading: true, side: THREE.DoubleSide})
         //const material = new THREE.MeshBasicMaterial( {color: 0x7c818b, side: THREE.DoubleSide} );
-        const mesh = new THREE.Mesh(geometry, material);
+        mesh_house = new THREE.Mesh(geometry, material);
 
         // Allow shadow and translate to (0, 0, 0)
-        mesh.receiveShadow = true;
-        mesh.geometry.translate(offsets.land.x + offsets.house.x, offsets.land.y + offsets.house.y, offsets.land.z)
-        mesh.rotation.x = x_rotation
+        mesh_house.receiveShadow = true;
+        mesh_house.geometry.translate(offsets.land.x + offsets.house.x, offsets.land.y + offsets.house.y, offsets.land.z)
+        mesh_house.rotation.x = x_rotation
 
-        scene.add(mesh);
+        scene.add(mesh_house);
     })
 
     // Load vegetation PCD
     LOADERS.pcd(vegetation, (points) => {
+        points_vegetation = points
 
         // Set points size and color
-        points.material.size = 0.5
-        points.material.color.setHex(0x3A5F0B)
+        points_vegetation.material.size = 0.5
+        points_vegetation.material.color.setHex(0x3A5F0B)
 
         // Translate to (0, 0, 0)
-        points.geometry.translate(offsets.land.x, offsets.land.y, offsets.land.z)
-        points.rotation.x = x_rotation
+        points_vegetation.geometry.translate(offsets.land.x, offsets.land.y, offsets.land.z)
+        points_vegetation.rotation.x = x_rotation
 
-        scene.add(points);
+        scene.add(points_vegetation);
     })
-
-    //console.log(scene)
 }
 
 let animate = () => {
@@ -163,4 +163,22 @@ let render = () => {
     renderer.render(scene, camera);
 }
 
-export {init, animate};
+// Display functions
+
+let displayHouse = (state) => {
+    mesh_house.visible = state
+}
+
+let displayLand = (state) => {
+    mesh_land.visible = state
+}
+
+let displayLandLines = (state) => {
+    lines_land.visible = state
+}
+
+let displayVegetation = (state) => {
+    points_vegetation.visible = state
+}
+
+export {init, animate, displayHouse, displayLand, displayLandLines, displayVegetation};

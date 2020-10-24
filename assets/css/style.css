@@ -185,6 +185,15 @@ canvas {
     width: 100%;
 }
 
+.detail-icon {
+    width: 40px;
+}
+
+.detail-text {
+    line-height: 32px;
+    text-align: center;
+}
+
 #sharing-card {
     margin-top: 10px;
 }
