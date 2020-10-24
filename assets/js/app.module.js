@@ -59,10 +59,12 @@ let displayHouse = (houseId, onRenderingComplete) => {
                     zip.file("house.ply").async('arraybuffer').then((house) => {
 
                         // Load offsets.json
-                        zip.file("offsets.json").async("text").then((offsets) => {
+                        zip.file("metadata.json").async("text").then((result) => {
+
+                            const json = JSON.parse(result)
 
                             // Init the scene rendering
-                            renderer.init(land, vegetation, house, JSON.parse(offsets))
+                            renderer.init(land, vegetation, house, json.offsets)
 
                             // Display the canvas
                             form.unlockForm()
@@ -72,7 +74,7 @@ let displayHouse = (houseId, onRenderingComplete) => {
 
                             // Display the share and map tab
                             share.displayShareData(houseId)
-                            map.unlockMap()
+                            map.unlockMap(json.meta)
                         })
                     })
                 })

@@ -70,9 +70,9 @@ let displayShareData = (houseID) => {
     const url = 'https://wallonia.ml/?id=' + houseID
 
     // Update the page URL with the houseId
-    /*history.pushState({
+    history.pushState({
         id: 'wallonia-ml'
-    }, 'Wallonia.ml - Address', url);*/
+    }, 'Wallonia.ml - Address', url);
 
     // Set the sharing link
     input_share.value = url
