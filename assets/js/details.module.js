@@ -1,6 +1,8 @@
 
 import * as renderer from './renderer.module.js';
 
+const details_tab = document.getElementById('details-tab')
+
 // Area fields
 const area_land = document.getElementById('area-land')
 const area_house = document.getElementById('area-house')
@@ -76,6 +78,15 @@ let addDetails = (details) => {
     // Append data to the details card
     area_land.innerText =  Math.trunc(details.area_property) + ' m²'
     area_house.innerText =  Math.trunc(details.area_building) + ' m²'
+
+    // Unlock the details tab
+    details_tab.classList.remove('disabled')
 }
 
-export {init, addDetails, resetCheckBoxes};
+let lockDetails = () => {
+
+    // Lock the details tab
+    details_tab.classList.add('disabled')
+}
+
+export {init, addDetails, resetCheckBoxes, lockDetails};

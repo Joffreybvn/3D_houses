@@ -78,8 +78,9 @@ let displayHouse = (houseId, onRenderingComplete) => {
                             share.displayShareData(houseId)
                             map.unlockMap(json.meta)
 
-                            details.addDetails(json.details)
                             details.resetCheckBoxes()
+                            details.addDetails(json.details)
+
                         })
                     })
                 })
