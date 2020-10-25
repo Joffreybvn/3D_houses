@@ -102,7 +102,7 @@ let init = (land, vegetation, house, offsets) => {
     LOADERS.ply(land, (geometry) => {
 
         // Translate to (0, 0, 0)
-        geometry.translate(offsets.land.x, offsets.land.y, offsets.land.z)
+        geometry.translate( - offsets.land.x, - offsets.land.y, - offsets.land.z)
 
         // Set mesh color and set double side (avoid see through)
         const material = new THREE.MeshBasicMaterial({color: 0x567d46, side: THREE.DoubleSide});
@@ -131,7 +131,7 @@ let init = (land, vegetation, house, offsets) => {
 
         // Allow shadow and translate to (0, 0, 0)
         mesh_house.receiveShadow = true;
-        mesh_house.geometry.translate(offsets.land.x + offsets.house.x, offsets.land.y + offsets.house.y, offsets.land.z)
+        mesh_house.geometry.translate(offsets.house.x, offsets.house.y, - offsets.land.z)
         mesh_house.rotation.x = x_rotation
 
         scene.add(mesh_house);
@@ -146,7 +146,7 @@ let init = (land, vegetation, house, offsets) => {
         points_vegetation.material.color.setHex(0x3A5F0B)
 
         // Translate to (0, 0, 0)
-        points_vegetation.geometry.translate(offsets.land.x, offsets.land.y, offsets.land.z)
+        points_vegetation.geometry.translate( - offsets.land.x,  - offsets.land.y, - offsets.land.z)
         points_vegetation.rotation.x = x_rotation
 
         scene.add(points_vegetation);
