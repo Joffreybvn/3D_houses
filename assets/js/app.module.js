@@ -29,18 +29,14 @@ let init = () => {
     })
 }
 
-
 let displayHouse = (houseId, onRenderingComplete) => {
 
     new JSZip.external.Promise((resolve, reject) => {
 
         // Load the zip as binary file
-        JSZipUtils.getBinaryContent('https://api.wallonia.ml/v1/model/' + houseId + '/', (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
+        //JSZipUtils.getBinaryContent('https://api.wallonia.ml/v1/model/' + houseId + '/', (err, data) => {
+        JSZipUtils.getBinaryContent('https://f002.backblazeb2.com/file/wallonia-lidar/data.zip', (err, data) => {
+            resolve(data);
         });
     })
         // Open the zip
@@ -51,38 +47,51 @@ let displayHouse = (houseId, onRenderingComplete) => {
         // Load the files
         .then((zip) => {
 
-            // Load land.ply
-            zip.file("land.ply").async('arraybuffer').then((land) => {
+            // Get the list of houses file names
+            let houses_files = Object.keys(zip.files).filter((str) => {
+                return str.includes('.ply')
+            });
 
-                // Load vegetation.pcd
-                zip.file("vegetation.pcd").async('arraybuffer').then((vegetation) => {
+            // Load all houses
+            Promise.allSettled(houses_files.map((house) => {
+                return new Promise((resolve, reject) => {
 
-                    // Load house.ply
-                    zip.file("house.ply").async('arraybuffer').then((house) => {
+                    // Retrieve the house index
+                    let index = parseInt(house.slice(0, -4))
 
-                        // Load offsets.json
-                        zip.file("metadata.json").async("text").then((result) => {
-
-                            const json = JSON.parse(result)
-
-                            // Init the scene rendering
-                            renderer.init(land, vegetation, house, json.offsets)
-
-                            // Display the canvas
-                            form.unlockForm()
-
-                            // Render the scene
-                            renderer.animate()
-
-                            // Display the share, map and details tab
-                            share.displayShareData(houseId)
-                            map.unlockMap(json.meta)
-
-                            details.resetCheckBoxes()
-                            details.addDetails(json.details)
-
-                        })
+                    // Unzip the house
+                    zip.file(house).async('arraybuffer').then((result) => {
+                        resolve([index, result])
                     })
+                })
+
+            })).then((houses) => {
+
+                // Load the land, vegetation and metadata
+                Promise.allSettled([
+                    zip.file("land._ply").async('arraybuffer'),
+                    zip.file("vegetation.pcd").async('arraybuffer'),
+                    zip.file("metadata.json").async("text")
+
+                ]).then((meshes) => {
+
+                    const json = JSON.parse(meshes[2].value)
+
+                    // Init the scene rendering
+                    renderer.init(meshes[0].value, meshes[1].value, houses, json.land, json.house)
+
+                    // Display the canvas
+                    form.unlockForm()
+
+                    // Render the scene
+                    renderer.animate()
+
+                    // Display the share, map and details tab
+                    share.displayShareData(houseId)
+                    map.unlockMap(json.meta)
+
+                    details.resetCheckBoxes()
+                    details.addDetails(json.details)
                 })
             })
         })
