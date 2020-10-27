@@ -6,7 +6,7 @@ import { TrackballControls } from './libs/three/TrackballControls.module.js';
 let canvas, renderer, scene, camera, controls,
     mesh_land, lines_land, mesh_house, points_vegetation;
 
-let init = (land, vegetation, houses, land_offsets, house_offsets) => {
+let init = (land, vegetation, houses, offsets) => {
 
     // Canvas definition
     canvas = document.getElementById('render');
@@ -102,7 +102,7 @@ let init = (land, vegetation, houses, land_offsets, house_offsets) => {
     LOADERS.ply(land, (geometry) => {
 
         // Translate to (0, 0, 0)
-        geometry.translate( - land_offsets.x, - land_offsets.y, - land_offsets.z)
+        geometry.translate( - offsets.land.x, - offsets.land.y, - offsets.land.z)
 
         // Set mesh color and set double side (avoid see through)
         const material = new THREE.MeshLambertMaterial( { color: 0x567D46, side: THREE.DoubleSide} )
@@ -134,7 +134,7 @@ let init = (land, vegetation, houses, land_offsets, house_offsets) => {
 
             // Allow shadow and translate to (0, 0, 0)
             mesh_house.receiveShadow = true;
-            mesh_house.geometry.translate(house_offsets[i].x, house_offsets[i].y, - house_offsets[i].z)
+            mesh_house.geometry.translate(offsets.house[i].x, offsets.house[i].y, - offsets.house[i].z)
             mesh_house.rotation.x = x_rotation
 
             scene.add(mesh_house);
@@ -150,7 +150,7 @@ let init = (land, vegetation, houses, land_offsets, house_offsets) => {
         points_vegetation.material.color.setHex(0x3A5F0B)
 
         // Translate to (0, 0, 0)
-        points_vegetation.geometry.translate( - land_offsets.x,  - land_offsets.y, - land_offsets.z)
+        points_vegetation.geometry.translate( - offsets.land.x,  - offsets.land.y, - offsets.land.z)
         points_vegetation.rotation.x = x_rotation
 
         scene.add(points_vegetation);

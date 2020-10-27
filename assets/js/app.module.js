@@ -30,12 +30,12 @@ let init = () => {
 }
 
 let displayHouse = (houseId, onRenderingComplete) => {
+    console.log(houseId)
 
     new JSZip.external.Promise((resolve, reject) => {
 
         // Load the zip as binary file
-        //JSZipUtils.getBinaryContent('https://api.wallonia.ml/v1/model/' + houseId + '/', (err, data) => {
-        JSZipUtils.getBinaryContent('https://f002.backblazeb2.com/file/wallonia-lidar/data.zip', (err, data) => {
+        JSZipUtils.getBinaryContent('https://api.wallonia.ml/v1/model/' + houseId, (err, data) => {
             resolve(data);
         });
     })
@@ -78,7 +78,7 @@ let displayHouse = (houseId, onRenderingComplete) => {
                     const json = JSON.parse(meshes[2].value)
 
                     // Init the scene rendering
-                    renderer.init(meshes[0].value, meshes[1].value, houses, json.land, json.house)
+                    renderer.init(meshes[0].value, meshes[1].value, houses, json.offsets)
 
                     // Display the canvas
                     form.unlockForm()
