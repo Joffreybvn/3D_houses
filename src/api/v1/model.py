@@ -15,7 +15,7 @@ from src.api.utils import JSONResponse
 api = Namespace('model', description='3D model creation.')
 
 
-@api.route('/<int:house_id>/')
+@api.route('/<int:house_id>')
 class Status(Resource):
 
     @api.doc(responses={

@@ -31,6 +31,29 @@ class Constructor:
         # Unzip and return its content
         return LZMAExtractor(file).extract()
 
+    def create_all_house_parts(self, directory):
+        """
+        Create a 3D house by instantiating a HouseModeler for
+        each house part.
+        :param directory:
+        :return:
+        """
+
+        houses_meta = []
+        index = 0
+
+        for house in self.data['houses']:
+            HouseModeler(index, house['dtm'], house['dsm']).save(directory)
+            houses_meta.append({
+                'x': house['translation'][0],
+                'y': house['translation'][1],
+                'z': house['translation'][2]
+            })
+
+            index += 1
+
+        return houses_meta
+
     @staticmethod
     def __create_zip(directory) -> io.BytesIO:
         """
@@ -48,7 +71,13 @@ class Constructor:
 
                 # Append each file within this directory, to the zip_file buffer.
                 for file in files:
-                    zip_file.write(os.path.join(root, file), arcname=file)
+
+                    # Rename land.ply
+                    file_rename = file
+                    if file == "land.ply":
+                        file_rename = "land._ply"
+
+                    zip_file.write(os.path.join(root, file), arcname=file_rename)
 
         archive.seek(0)
         return archive
@@ -62,11 +91,15 @@ class Constructor:
         # Create a temporary directory
         with tempfile.TemporaryDirectory() as directory:
 
-            # Create the land, vegetation and house.
+            # Create the land and vegetation
             LandModeler(self.data['dtm_land_bounded'], self.data['dtm_land_bbox']).save(directory)
             VegetationModeler(self.data['dsm_vegetation']).save(directory)
-            HouseModeler(self.data['dtm_house'], self.data['dsm_house']).save(directory)
-            JSONMetadata(self.data['translation_land'], self.data['translation_house'], self.data['meta'], self.data['details']).save(directory)
+
+            # Create the house
+            house_metadata = self.create_all_house_parts(directory)
+
+            # Create the JSON file
+            JSONMetadata(self.data['translation_land'], house_metadata, self.data['meta'], self.data['details']).save(directory)
 
             # Return all files into a compressed zip buffer
             return self.__create_zip(directory)

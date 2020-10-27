@@ -4,17 +4,17 @@ import json
 
 class JSONMetadata:
 
-    def __init__(self, offset_land, offset_house, metadata, details):
+    def __init__(self, offset_land, house_metadata, metadata, details):
         """
         Create and return a JSON with the offset of the land and the house.
         :param offset_land: A (x, y, z) offset of the land, relative to 0, 0.
-        :param offset_house: A (x, y) offset of the house, relative to land 0, 0.
+        :param house_metadata: A list of offsets and index of each house's part.
         :param metadata: Metadata dictionary of the house.
         :param details: Details of the house (terrain area and house area).
         """
 
         self.offset_land = offset_land
-        self.offset_house = offset_house
+        self.house_metadata = house_metadata
         self.metadata = metadata
         self.details = details
 
@@ -31,10 +31,7 @@ class JSONMetadata:
                     'y': self.offset_land[1],
                     'z': self.offset_land[2]
                 },
-                'house': {
-                    'x': self.offset_house[0],
-                    'y': self.offset_house[1],
-                }
+                'house': self.house_metadata
             },
             'meta': self.metadata,
             'details': self.details
