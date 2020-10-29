@@ -95,6 +95,8 @@ All the meshes and cloud points created with Open3D are wrapped into a zip file.
 
 And finally, the zip file is sent to the client.
 
+## A ThreeJS web app:
+
 
 ## Future improvements
 
@@ -102,13 +104,7 @@ And finally, the zip file is sent to the client.
   - Les mesh peuvent être créée de manière asynchrome, sur plusieurs threads.
   - Dès que l'un est créé, il peut être streamé au client, afin que celui-ci puisse démarrer plus tôt le rendu.
 
+- Augmenter la résolution du mesh: Actuellement, le raster est utilisé pour créer un nuage de point, sans modification préalable. Or, pour obtenir un mesh plus joli, il faut travailler sur le raster afin de créer plus de points.
 
-### Program structure
+- Implémenter le cache du serveur: Actuellement, le serveur génère un mesh à chaque requête du client; même si celui-ci demande deux fois la même maison. Dans le futur: le serveur conservera le résultat du meshing et l'uploadera dans un bucket "cache" sur Backblaze.
 
-
-
-DTM + Cadastre terrain -> Poisson -> Terrain.ply
-DTM + Cadastre Batiment -> BBox + z.max -> House.ply
-DSM - DTM = Vegetation -> Keep points -> Vegetation.pyc
-
-rclone rcd --rc-web-gui --rc-user=admin --rc-pass=pass --rc-serve
