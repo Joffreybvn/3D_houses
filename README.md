@@ -8,6 +8,29 @@ Wallonia.ml is a web application allowing to visualize any private property (hou
 
 It was solved in 4 weeks.
 
+## Application structure
+
+This application is divided into 3 parts:
+ - **A static content server**: LIDAR data is hosted in a bucket on Backblaze B2. During the pre-processing phase, these data were cut, split, transformed and compressed to be quickly usable by the 3D modeling API.
+
+- **A 3D modeling API**: This API receives the location requested by the user and creates a 3D representation of this location thanks to the data stored on the static server. The [Open3D library](http://www.open3d.org/) is used during the meshing operation.
+
+- **A rendering web app**: The user interacts with the web application hosted on [wallonia.ml](https://wallonia.ml/). After he typed an address, the application calls the API, retrieves the 3D model it provides, and displays it in a canvas with Threejs.
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
+</p>
+
+
+
+Créer une représentation 3D d'un lieu est une opération longue et couteuse. C'est pourquoi elle est réalisée à la demande, en fonction du lieu que désire visualiser l'utilisateur. 
+ 
+## Data pre-processing
+
+### Problem: Dealing with 100GB+ of data
+The main difficulty of this project was to work with 100GB+ of LIDAR data, divided into files ranging from 3.5BG to 15GB. **How to host an API that requires working with 15GB files?**
+
+## Future improvements
 Steps:
 1. Récupérer et nettoyer les données
 2. Comment calculer une image 3D depuis des points LIDAR ?
@@ -20,9 +43,6 @@ Steps:
 
 ### Program structure
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
-</p>
 
 
 DTM + Cadastre terrain -> Poisson -> Terrain.ply
