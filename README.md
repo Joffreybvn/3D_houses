@@ -1,5 +1,12 @@
-# [Wallonia.ml](https://wallonia.ml) - 3D house visualization Web App
+# [Wallonia.ml](https://wallonia.ml) - 3D house visualization web app
 [![Python version](https://img.shields.io/badge/Python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) [![Travis CI](https://travis-ci.com/Joffreybvn/wallonia-ml.svg?branch=main)](https://travis-ci.com/Joffreybvn/wallonia-ml)
+
+Wallonia.ml is a web application allowing to visualize any private property (house, apartment, ...) in Wallonia. The [web application](https://github.com/Joffreybvn/wallonia-ml/tree/gh-pages) is developed in Javascript with [Bootstrap](https://v5.getbootstrap.com/), the [3D modeling API](https://github.com/Joffreybvn/wallonia-ml/tree/main) is developed in Python.
+
+#### This application is a response to a challenge given by [Becode](https://becode.org/):
+> Given LIDAR data, deploy an application where the user type an address and see the location in 3D. 
+
+It was solved in 4 weeks.
 
 Steps:
 1. Récupérer et nettoyer les données
