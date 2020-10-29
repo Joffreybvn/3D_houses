@@ -15,7 +15,7 @@ This application is divided into 3 parts:
 
 - **A 3D modeling API**: This API receives the location requested by the user and creates a 3D representation of this location thanks to the data stored on the static server. The [Open3D library](http://www.open3d.org/) is used during the meshing operation.
 
-- **A rendering web app**: The user interacts with the web application hosted on [wallonia.ml](https://wallonia.ml/). After he typed an address, the application calls the API, retrieves the 3D model it provides, and displays it in a canvas with Threejs.
+- **A rendering web app**: The user interacts with the web application hosted on [wallonia.ml](https://wallonia.ml/). After he typed an address, the application calls the API, retrieves the 3D model it provides, and displays it in a canvas with [Threejs](https://threejs.org/).
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
@@ -28,7 +28,17 @@ Créer une représentation 3D d'un lieu est une opération longue et couteuse. C
 ## Data pre-processing
 
 ### Problem: Dealing with 100GB+ of data
-The main difficulty of this project was to work with 100GB+ of LIDAR data, divided into files ranging from 3.5BG to 15GB. **How to host an API that requires working with 15GB files?**
+The main difficulty of this project was to work with 100GB+ of LIDAR raster, divided into files ranging from 3.5BG to 15GB. **How to host an API that requires working with 15GB files?**
+
+<img src="https://raw.githubusercontent.com/Joffreybvn/wallonia-ml/main/doc/arrow.svg" width="12"> **Solution**: Divide the 100 GB of data into smaller file sizes so that they can be easily hosted and easily used by the API.
+
+### Problem: Display the whole property, and only the property
+I wanted the user to be able to view his property (house + garden), and only his property. Nothing more ! **How do you determine the boundaries between one property and another ?** And how to get LIDAR data only for this property ?
+
+<img src="https://raw.githubusercontent.com/Joffreybvn/wallonia-ml/main/doc/arrow.svg" width="12"> **Solution**: I used the dataset of the [Belgian cadastral plan](https://finances.belgium.be/fr/particuliers/habitation/cadastre/plan-cadastral), a file that contains the boundaries of each property and each building in Belgium, in the form of shapefiles. I also used the [dataset of the address points of Wallonia](http://geoportail.wallonie.be/catalogue/2998bccd-dae4-49fb-b6a5-867e6c37680f.html). By superimposing the address points with the cadastres, **I created a new dataset that contains the address and the dadastral plan** of each private Walloon property.
+
+Then, I was able to cut the 100GB of raster into as many files as there are postal addresses in my dataset (± 1.500.000).
+
 
 ## Future improvements
 Steps:
