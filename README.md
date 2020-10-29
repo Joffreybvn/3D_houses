@@ -69,31 +69,38 @@ How to deliver the 3D model of a property to the user as quickly as possible? Id
   - Finding the ideal balance between accurate rendering and fast rendering: *See below for more details*.
 - [ ] **Cache results to deliver it faster the next time**: The cache will be implemented later, after adding a feature to increase the quality of the raster.
 
-### Fast and accurate rendering:
+### Fast and accurate meshing:
 
-#### 1. The vegetation: No rendering
+#### 1. The vegetation: No meshing
 The vegetation (trees) is the most difficult element to put in 3D, especially from altitude data. In order to make the final rendering look nice and understandable, the point cloud corresponding to the vegetation is **not modified at all: it is directly displayed in the browser**.
 
 The operation is therefore very inexpensive: the API simply puts this data in the zip file that will be delivered to the client.
 
 #### 2. The house: A convex hull
-One of the simplest meshing algorithms is to create a hull around all the cloud's points. In Open3D, this algorithm is called "[Compute Convex Hull](http://www.open3d.org/docs/0.10.0/python_api/open3d.geometry.PointCloud.html#open3d.geometry.PointCloud.compute_convex_hull)". It is **very inexpensive, and therefore very fast**.
+One of the simplest meshing algorithms is to create a hull around all the cloud's points.
+
+<p align="center">
+    <img src="https://github.com/Joffreybvn/wallonia-ml/blob/main/doc/convex_hull.jpg?raw=true">
+</p>
+
+In Open3D, this algorithm is called "[Compute Convex Hull](http://www.open3d.org/docs/0.10.0/python_api/open3d.geometry.PointCloud.html#open3d.geometry.PointCloud.compute_convex_hull)". It is **very inexpensive, and therefore very fast**.
 
 However, this algorithm does not allow to obtain a correct mesh when the house is concave . This is why, during the pre-processing phase, **the house is cut into small parts using a triangulation algorithm**.
 
 #### 3. The land: Beautifully expensive
-Visually, having a nice plot of land helps the user to locate and recognize his house. But only complex algorithms can transform a point cloud into a surface curved by the curves of the terrain... Poisson's surface reconstruction algorithm was used, and tuned to consume as few resources as possible while maintaining good resolution.
+Visually, having a nice plot of land helps the user to locate and recognize his house. But only complex algorithms can transform a point cloud into a surface curved by the curves of the terrain... [Poisson's surface reconstruction algorithm](https://github.com/Joffreybvn/wallonia-ml/blob/main/doc/poissonrecon.pdf) was used, and **tuned to consume as few resources as possible** while maintaining good resolution.
+
+### Delivering the meshes
+All the meshes and cloud points created with Open3D are wrapped into a zip file. A metadata file, containing the location information of the house is added.
+
+And finally, the zip file is sent to the client.
 
 
 ## Future improvements
-Steps:
-1. Récupérer et nettoyer les données
-2. Comment calculer une image 3D depuis des points LIDAR ?
-3. Possibilité de compresser/transformer/réduire/fractionner la taille des données ?
- - Cloudflare + Backblaze
- - Comment diviser les données en chunks ? Google collab ?
-4. API qui renvoit une image 3D à une application web
-  - Adresses to lat/long ? https://towardsdatascience.com/geocode-with-python-161ec1e62b89
+
+- Délivrer les résultats via un stream de données: Actuellement, l'API crée les meshs d'une propriété les un après les autres. Une fois l'ensemble créé, elle délivre les meshs dans un fichier zip. Or, il est possible d'accélérer le processus:
+  - Les mesh peuvent être créée de manière asynchrome, sur plusieurs threads.
+  - Dès que l'un est créé, il peut être streamé au client, afin que celui-ci puisse démarrer plus tôt le rendu.
 
 
 ### Program structure
