@@ -21,10 +21,8 @@ This application is divided into 3 parts:
     <img src="https://raw.githubusercontent.com/Joffreybvn/3D_houses/main/doc/program_structure.svg">
 </p>
 
+Each part of this application is explained in detail below.
 
-
-Créer une représentation 3D d'un lieu est une opération longue et couteuse. C'est pourquoi elle est réalisée à la demande, en fonction du lieu que désire visualiser l'utilisateur. 
- 
 ## Data pre-processing
 Working with 100GB of LIDAR in the form of rasters has brought many problems:
 
@@ -52,6 +50,39 @@ The pre-processing of the data was done in two steps:
  - **Notebook 2 - [Static files creation](https://github.com/Joffreybvn/wallonia-ml/blob/main/notebooks/step2_create_static_files.ipynb)**: In this notebook, I use the previously created dataset to split the raster and convert the result into compressed pickle files, which are directly hosted on Backblaze.
  
 I invite you to read these [notebooks](https://github.com/Joffreybvn/wallonia-ml/tree/main/notebooks) to have more information about the pre-creation process of 3D models.
+
+## The 3D modeling API
+
+Creating a 3D representation of a place is a long and expensive operation. This is why it is carried out on demand, depending on the place the user wants to visualize. 
+
+<p align="center">
+    <img src="https://github.com/Joffreybvn/wallonia-ml/blob/main/doc/render_example.png?raw=true">
+</p>
+
+### Problem: Speeding up the process
+How to deliver the 3D model of a property to the user as quickly as possible? Ideally, by staying under the 3 seconds waiting time.
+
+<img src="https://raw.githubusercontent.com/Joffreybvn/wallonia-ml/main/doc/arrow.svg" width="12"> **Solutions**:
+- [x] **Pre-process the data as much as possible**: This was done in the previous step "Data pre-processing".
+- [x] **Make the 3D meshing as simple as possible**:
+  - Using the raw data, which consists of 1 point/m².
+  - Finding the ideal balance between accurate rendering and fast rendering: *See below for more details*.
+- [ ] **Cache results to deliver it faster the next time**: The cache will be implemented later, after adding a feature to increase the quality of the raster.
+
+### Fast and accurate rendering:
+
+#### 1. The vegetation: No rendering
+The vegetation (trees) is the most difficult element to put in 3D, especially from altitude data. In order to make the final rendering look nice and understandable, the point cloud corresponding to the vegetation is **not modified at all: it is directly displayed in the browser**.
+
+The operation is therefore very inexpensive: the API simply puts this data in the zip file that will be delivered to the client.
+
+#### 2. The house: A convex hull
+One of the simplest meshing algorithms is to create a hull around all the cloud's points. In Open3D, this algorithm is called "[Compute Convex Hull](http://www.open3d.org/docs/0.10.0/python_api/open3d.geometry.PointCloud.html#open3d.geometry.PointCloud.compute_convex_hull)". It is **very inexpensive, and therefore very fast**.
+
+However, this algorithm does not allow to obtain a correct mesh when the house is concave . This is why, during the pre-processing phase, **the house is cut into small parts using a triangulation algorithm**.
+
+#### 3. The land: Beautifully expensive
+Visually, having a nice plot of land helps the user to locate and recognize his house. But only complex algorithms can transform a point cloud into a surface curved by the curves of the terrain... Poisson's surface reconstruction algorithm was used, and tuned to consume as few resources as possible while maintaining good resolution.
 
 
 ## Future improvements
