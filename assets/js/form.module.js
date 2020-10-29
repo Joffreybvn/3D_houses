@@ -4,7 +4,7 @@ import * as map from './map.module.js';
 import * as details from './details.module.js';
 
 // Define constants
-const DATA_API = "https://data.wallonia.ml/file/wallonia-lidar"
+const DATA_API = "https://static.wallonia.ml/file/wallonia-lidar"
 
 let dict_postalCodes, list_postalCodes, postalCode,
     dict_streetNames, list_streetNames, streetId,
