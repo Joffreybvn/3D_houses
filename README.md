@@ -1,5 +1,5 @@
-# Wallonia.ml - 3D houses visualization Web App
-[![Python version](https://img.shields.io/badge/Python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) [![Travis CI](https://api.travis-ci.org/Joffreybvn/3D_houses.svg?branch=main)](https://travis-ci.org/github/Joffreybvn/3D_houses)
+# [Wallonia.ml](https://wallonia.ml) - 3D house visualization Web App
+[![Python version](https://img.shields.io/badge/Python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) [![Travis CI](https://travis-ci.com/Joffreybvn/wallonia-ml.svg?branch=main)](https://travis-ci.com/Joffreybvn/wallonia-ml)
 
 Steps:
 1. Récupérer et nettoyer les données
