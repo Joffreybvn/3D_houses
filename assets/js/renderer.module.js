@@ -121,6 +121,7 @@ let init = (land, vegetation, houses, offsets) => {
     })
 
     // Load house PLY
+    mesh_house = new THREE.Group();
     for (let house of houses) {
 
         const i = house.value[0]
@@ -130,16 +131,17 @@ let init = (land, vegetation, houses, offsets) => {
 
             // Set mesh color and set double side (avoid see through)
             const material = new THREE.MeshPhongMaterial({color: 0x7c818b, specular: 0x7d4031, shininess: 10, flatShading: true, side: THREE.DoubleSide})
-            mesh_house = new THREE.Mesh(geometry, material);
+            const mesh = new THREE.Mesh(geometry, material);
 
             // Allow shadow and translate to (0, 0, 0)
-            mesh_house.receiveShadow = true;
-            mesh_house.geometry.translate(offsets.house[i].x, offsets.house[i].y, - offsets.house[i].z)
-            mesh_house.rotation.x = x_rotation
+            mesh.receiveShadow = true;
+            mesh.geometry.translate(offsets.house[i].x, offsets.house[i].y, - offsets.house[i].z)
+            mesh.rotation.x = x_rotation
 
-            scene.add(mesh_house);
+            mesh_house.add(mesh);
         })
     }
+    scene.add(mesh_house)
 
     // Load vegetation PCD
     LOADERS.pcd(vegetation, (points) => {
