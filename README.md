@@ -51,6 +51,23 @@ The pre-processing of the data was done in two steps:
  
 I invite you to read these [notebooks](https://github.com/Joffreybvn/wallonia-ml/tree/main/notebooks) to have more information about the pre-creation process of 3D models.
 
+## Store data on S3
+
+When the data has been pre-processed, it is hosted in an S3 bucket on [Backblaze B2](https://www.backblaze.com/). There are two kinds of data:
+
+### Houses static data
+
+This data will be used by the modeling API. It is a point cloud converted into a Numpy array, stored in a Pickle and then compressed. In order to gain speed, each building is saved in its own file. Currently, **there are about 1.500.000 house files** on the server.
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Joffreybvn/wallonia-ml/main/doc/house_data_transformation.svg">
+</p>
+
+This data weighs 18GB, thanks to compression that reduces the size of the Pickle by up to 10 times.
+
+
+### Geocoding data
+
 ## The 3D modeling API
 
 Creating a 3D representation of a place is a long and expensive operation. This is why it is carried out on demand, depending on the place the user wants to visualize. 
@@ -87,7 +104,7 @@ In Open3D, this algorithm is called "[Compute Convex Hull](http://www.open3d.org
 
 However, this algorithm does not allow to obtain a correct mesh when the house is concave . This is why, during the pre-processing phase, **the house is cut into small parts using a triangulation algorithm**.
 
-#### 3. The land: Beautifully expensive
+#### 3. The land: Expensive Poisson
 Visually, having a nice plot of land helps the user to locate and recognize his house. But only complex algorithms can transform a point cloud into a surface curved by the curves of the terrain... [Poisson's surface reconstruction algorithm](https://github.com/Joffreybvn/wallonia-ml/blob/main/doc/poissonrecon.pdf) was used, and **tuned to consume as few resources as possible** while maintaining good resolution.
 
 ### Delivering the meshes
@@ -96,7 +113,10 @@ All the meshes and cloud points created with Open3D are wrapped into a zip file.
 And finally, the zip file is sent to the client.
 
 ## A ThreeJS web app:
-
+- rendu avec threejs
+- fonction de recherche
+- Map openstreetmap belge
+- 
 
 ## Future improvements
 
