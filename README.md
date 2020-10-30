@@ -67,6 +67,7 @@ This data weighs 18GB, thanks to compression that reduces the size of the Pickle
 
 
 ### Geocoding data
+A static file API is also created, along with the building files. It is a registry allowing to link each file to a postal address. It is used by the web application as a geocoding API.
 
 ## The 3D modeling API
 
@@ -113,18 +114,26 @@ All the meshes and cloud points created with Open3D are wrapped into a zip file.
 And finally, the zip file is sent to the client.
 
 ## A ThreeJS web app:
-- rendu avec threejs
-- fonction de recherche
-- Map openstreetmap belge
-- 
+
+### The search form, geocode seemlessly
+To save time, the search form of the web application takes care of transforming the address entered by the user into the id of the building to be displayed. It does this while the user writes the address, as a background task:
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Joffreybvn/wallonia-ml/main/doc/form_seemless_geocoding.svg">
+</p>
+
+### 3D rendering with ThreeJS
+The 3D rendering in the browser is done with [ThreeJS](https://threejs.org/), a powerful library that allows to use complex browser features such as WebGL and shaders. In addition, ThreeJS supports a wide variety of file formats, allowing it to be used with Open3D.
+
+At the time of rendering, [shaders](https://threejs.org/examples/) are applied to the textures and the environment of the rendering scene, in order to give a smoother and more realistic aspect to the displayed property.
 
 ## Future improvements
 
-- Délivrer les résultats via un stream de données: Actuellement, l'API crée les meshs d'une propriété les un après les autres. Une fois l'ensemble créé, elle délivre les meshs dans un fichier zip. Or, il est possible d'accélérer le processus:
-  - Les mesh peuvent être créée de manière asynchrome, sur plusieurs threads.
-  - Dès que l'un est créé, il peut être streamé au client, afin que celui-ci puisse démarrer plus tôt le rendu.
+- **Delivering results via a data stream**: Currently, the API creates the meshes of a property one after the other. Once the set is created, it delivers the meshes in a zip file. However, it is possible to speed up the process:
+  - Meshes can be created asynchronously, on several threads.
+  - As soon as one is created, it can be streamed to the client, so that the client can start rendering earlier..
 
-- Augmenter la résolution du mesh: Actuellement, le raster est utilisé pour créer un nuage de point, sans modification préalable. Or, pour obtenir un mesh plus joli, il faut travailler sur le raster afin de créer plus de points.
+- **Increase mesh resolution**: Currently, the raster is used to create a point cloud, without prior modification. However, to get a nicer mesh, we can work on the raster to create more points.
 
-- Implémenter le cache du serveur: Actuellement, le serveur génère un mesh à chaque requête du client; même si celui-ci demande deux fois la même maison. Dans le futur: le serveur conservera le résultat du meshing et l'uploadera dans un bucket "cache" sur Backblaze.
+- **Implement server cache**: Currently, the server generates a mesh for each client request; even if the client requests the same house twice. In the future: the server will keep the result of the meshing and upload it in a "cache" bucket on Backblaze.
 
