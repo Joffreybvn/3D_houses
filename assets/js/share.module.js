@@ -69,7 +69,7 @@ let displayShareData = (houseID) => {
 
     const url = 'https://wallonia.ml/?id=' + houseID
 
-    // Update the page URL with the houseId
+    // Update the page URL with the houseId.
     history.pushState({
         id: 'wallonia-ml'
     }, 'Wallonia.ml - Address', url);
