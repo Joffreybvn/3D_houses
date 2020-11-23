@@ -4,7 +4,7 @@
 Wallonia.ml is a web application allowing to visualize any private property (house, apartment, ...) in Wallonia. The [web application](https://github.com/Joffreybvn/wallonia-ml/tree/gh-pages) is developed in Javascript with [Bootstrap](https://v5.getbootstrap.com/), the [3D modeling API](https://github.com/Joffreybvn/wallonia-ml/tree/main) is developed in Python.
 
 #### This application is a response to a challenge given by [Becode](https://becode.org/):
-> Given LIDAR data, deploy an application where the user type an address and see the location in 3D. 
+> Given [LIDAR data](http://geoportail.wallonie.be/catalogue/cd7578ef-c726-46cb-a29e-a90b3d4cd368.html), deploy an application where the user type an address and see the location in 3D. 
 
 It was solved in 4 weeks.
 
@@ -24,7 +24,7 @@ This application is divided into 3 parts:
 Each part of this application is explained in detail below.
 
 ## Data pre-processing
-Working with 100GB of LIDAR in the form of rasters has brought many problems:
+This application was created with a [100GB file of LIDAR data](http://geoportail.wallonie.be/catalogue/cd7578ef-c726-46cb-a29e-a90b3d4cd368.html), created by the Walloon public service between 2013 and 2014.
 
 ### Problem: Dealing with 100GB+ of data
 The main difficulty of this project was to work with 100GB+ of LIDAR raster, divided into files ranging from 3.5BG to 15GB. **How to host an API that requires working with 15GB files?**
