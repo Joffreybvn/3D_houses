@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask_restx import Api
 
 # Import the routes
-from src.api.v1 import api_model
+from src.api.v1 import api_model, api_price
 
 blueprint = Blueprint('v1', __name__)
 
@@ -12,6 +12,7 @@ blueprint = Blueprint('v1', __name__)
 api = Api(blueprint,
           title='Wallonia.ml API',
           version='1.0',
-          description="Wallonia's 3D building generated from LIDAR heightmaps.")
+          description="Wallonia's properties prices and 3D models.")
 
 api.add_namespace(api_model)
+api.add_namespace(api_price)
