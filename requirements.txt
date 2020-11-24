@@ -4,4 +4,6 @@ werkzeug
 open3d==0.10.0.0
 requests
 numpy
+scikit-learn
+xgboost
 setuptools
