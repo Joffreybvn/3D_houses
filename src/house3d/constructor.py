@@ -8,6 +8,7 @@ from src.house3d.utils import FileFetcher, LZMAExtractor
 from src.config import config
 from src.house3d import JSONMetadata
 from src.house3d.modelers import LandModeler, VegetationModeler, HouseModeler
+from src.price.simple import HousePredictor
 
 
 class Constructor:
@@ -17,6 +18,7 @@ class Constructor:
         Create a 3D house from a given LZMA-compressed pickle.
         """
         self.data = self.__retrieve_data(house_id)
+        self.house_predictor = HousePredictor()
 
     @staticmethod
     def __retrieve_data(house_id) -> dict:
@@ -97,6 +99,12 @@ class Constructor:
 
             # Create the house
             house_metadata = self.create_all_house_parts(directory)
+
+            # Predict and append the price
+            self.data['meta']['price'] = self.house_predictor\
+                .get_prediction(self.data['meta']['postal_code'],
+                                self.data['details']['area_property'],
+                                self.data['details']['area_building'])
 
             # Create the JSON file
             JSONMetadata(self.data['translation_land'], house_metadata, self.data['meta'], self.data['details']).save(directory)

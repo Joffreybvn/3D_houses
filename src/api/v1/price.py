@@ -5,7 +5,7 @@ from flask_restx import Namespace, Resource, fields
 from src.price.advanced import HousePredictor, ApartmentPredictor
 
 # API documentation init
-api = Namespace('price', description='3D price prediction')
+api = Namespace('price', description='Property price prediction')
 
 model = api.model('Model', {
     'price': fields.Integer,
@@ -40,13 +40,15 @@ class Price(Resource):
             # Send a response
             return {
                 'price': price,
-                'status': True
+                'status': True,
+                'message': "The prediction was handled correctly."
             }
 
         except:
 
             return {
                 'price': 0,
-                'status': False
+                'status': False,
+                'message': "An unknown error occurred during the price prediction"
             }
 

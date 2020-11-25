@@ -1,19 +1,18 @@
 
 import pickle
 from typing import Tuple
-from sklearn.preprocessing import RobustScaler
 import xgboost as xgb
 from src.price import Geocoder
 
 
-class AdvancedPredictor:
+class BasePredictor:
 
     def __init__(self, model_file: str):
         self.model, self.scaler = self.__load_model(model_file)
         self.geocoder = Geocoder()
 
     @staticmethod
-    def __load_model(model_file: str) -> Tuple[xgb.XGBRegressor, RobustScaler]:
+    def __load_model(model_file: str) -> Tuple[xgb.XGBRegressor, any]:
         """Load the basic house model."""
 
         # Load the pickle file
@@ -42,4 +41,4 @@ class AdvancedPredictor:
         scaled_data = self.scaler.transform(property_data)
 
         # Predict and return the price
-        return self.model.predict(scaled_data)[0]
+        return int(self.model.predict(scaled_data)[0])

@@ -1,8 +1,8 @@
 
-from src.price.advanced import AdvancedPredictor
+from src.price import BasePredictor
 
 
-class HousePredictor(AdvancedPredictor):
+class HousePredictor(BasePredictor):
 
     def __init__(self):
         super().__init__("model_advanced_house.p")
