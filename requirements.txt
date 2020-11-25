@@ -4,6 +4,7 @@ werkzeug
 open3d==0.10.0.0
 requests
 numpy
-scikit-learn
-xgboost
+scikit-learn==0.22.2.post1
+pandas
+xgboost==0.90
 setuptools
