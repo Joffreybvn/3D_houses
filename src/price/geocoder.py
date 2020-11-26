@@ -4,7 +4,7 @@ import pandas as pd
 
 class Geocoder:
     """
-    Transform the values send to this API,
+    Transform the geo_localisation values sent to this API,
     into clean and usables values for the prediction models.
     """
 
@@ -44,7 +44,7 @@ class Geocoder:
         if self.postal_codes.isin([postal_code]).sum():
             return postal_code
 
-        # If not, return a rounded postal code. Ex: 6999 -> 6000
+        # If not, return a. existing postal code. Ex: 6999 -> 6000
         else:
             return int(round(postal_code / 1000, 0) * 1000)
 
@@ -71,5 +71,5 @@ class Geocoder:
               'region_int',
               'ratio_free_build']].iloc[0]
 
-        # Transform the data and return it
+        # Convert to list and return it
         return localization.T.to_numpy().tolist()

@@ -6,5 +6,6 @@ requests
 numpy
 scikit-learn==0.22.2.post1
 pandas
-xgboost==0.90
+lightgbm==2.2.3
+catboost==0.24.3
 setuptools

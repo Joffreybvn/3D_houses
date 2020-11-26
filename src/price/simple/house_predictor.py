@@ -1,8 +1,8 @@
 
-from src.price import BasePredictor
+from src.price.simple import SimplePredictor
 
 
-class HousePredictor(BasePredictor):
+class HousePredictor(SimplePredictor):
 
     def __init__(self):
         super().__init__("model_basic_house.p")
